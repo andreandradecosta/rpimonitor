@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/andreandradecosta/rpimonitor/models"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 )
@@ -11,25 +14,29 @@ import (
 func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Index")
 }
-func ProcIndex(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Proc Index")
-}
-func ProcShow(w http.ResponseWriter, r *http.Request) {
-	proc := mux.Vars(r)["procID"]
-	fmt.Fprintf(w, "Proc Show: %s", proc)
-}
+
 func TempShow(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Temp Show")
+	temp := models.Sample{
+		Name:  "Temperature",
+		Time:  time.Now(),
+		Value: "1",
+	}
+	json.NewEncoder(w).Encode(temp)
 }
+
 func CPUShow(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "CPU Show")
+	cpu := models.Sample{
+		Name:  "CPU Load",
+		Time:  time.Now(),
+		Value: "1",
+	}
+	json.NewEncoder(w).Encode(cpu)
+
 }
 
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", Index)
-	router.HandleFunc("/proc", ProcIndex)
-	router.HandleFunc("/proc/{procID}", ProcShow)
 	router.HandleFunc("/hw/temp", TempShow)
 	router.HandleFunc("/hw/cpu", CPUShow)
 
