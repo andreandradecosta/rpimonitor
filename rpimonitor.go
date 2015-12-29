@@ -1,23 +1,22 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
+	"github.com/andreandradecosta/rpimonitor/controllers/monitor"
 	"github.com/codegangsta/negroni"
+	"github.com/gorilla/mux"
+	"gopkg.in/unrolled/render.v1"
 )
 
-func MyMiddleware(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
-	log.Println("MyMiddleware:", r.RequestURI)
-	next(w, r)
-}
-
 func main() {
-	router := NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
+	renderer := render.New(render.Options{
+		IndentJSON: true,
+	})
+
+	c := monitor.New(renderer)
+	c.Register(router)
 
 	n := negroni.Classic()
-	n.Use(negroni.HandlerFunc(MyMiddleware))
 	n.UseHandler(router)
-
 	n.Run(":8080")
 }
