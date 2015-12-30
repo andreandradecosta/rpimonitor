@@ -1,12 +1,14 @@
 language: go
+
 go:
     - 1.5
     - tip
+
 env:
-    - GOOS=linux GOARCH=arm GOARM=7
+    - GIMME_OS=linux GIMME_ARCH=arm
+
 script:
-  - "go get -d -v ./..."
-  - "env GOOS=linux GOARCH=arm GOARM=7 go build -v"
+  - go build -v
 
 
 deploy:
@@ -20,3 +22,4 @@ deploy:
   on:
     repo: andreandradecosta/rpimonitor
     tags: true
+    go: 1.5
