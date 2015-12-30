@@ -4,11 +4,11 @@ go:
     - tip
 env:
     - GOOS=linux GOARCH=arm GOARM=7
-install:
+script:
   - "go get -d -v ./..."
-  - "go build -v"
+  - "env GOOS=linux GOARCH=arm GOARM=7 go build -v"
 
-  
+
 deploy:
   provider: releases
   api_key:
