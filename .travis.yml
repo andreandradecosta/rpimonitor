@@ -9,5 +9,7 @@ deploy:
   api_key:
     secure: a+iwDhQzrcOKzI4vC72FHG7Xm7uejLATYFD+nbFBm+dWREju48SWxtO41T6ARTEcCmNC4N+NP3LGHkqYsrUiplVKBP7C7piH+uwHulqVhHsY5+lZ3Fz3NYV/vJUHZBT5fc3FvbSl8y8A+nqlYFvcoG2ZoNeAZmNx52lNgD2aqzUEzMrYRxzg5K+ZaliOJClF1gtoISHZMiTn024X+yIsjQwZrmvIqNIChZFOmR+ZVSMluYd151E+ZwBf1x31BIVUkkAg1tbMvbPe3MxYVSVKdsPWCDTGy20J8lJhKHUyccCNe8LEpwhWQZPa/iLE6No7+S4atEjulme6ODaR7j0jSqUmdWvgzKv20r+u6dMF84ajNkKpgvSFm6Kjl7knYQ+1SB7Rm3p7EUd+NXhRzC871Ta9MvsJgjwSAr1E5u3reeMvTIxxXWF8/HRlaio0q61wZu6qhWUFnqsVdONzvgtAGRcekHiXpGxPhgxyTQLn+6xh4G/sabu1DeXLk+RGz8b8eiulm7JUsBYIhEv9ImgiQcIcOqwbZmZHlH50YmS9bXEli/eh8aOUp6C4+knWa+c8XINSouTgsw0IA+IF7aBOsU3JyDLm6Ovh/wZLwQyrNLSm4Lz5CdAjxGwvKPUUVE7X6Np5c3QNK8PzkPFI2/KqzOQ9tH727B+aWvcQ8Oi+aJI=
   file: rpimonitor
+  skip_cleanup: true
   on:
     repo: andreandradecosta/rpimonitor
+    tags: true
