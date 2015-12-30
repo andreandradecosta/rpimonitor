@@ -2,7 +2,6 @@ package monitor
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/andreandradecosta/rpimonitor/controllers"
 	"github.com/andreandradecosta/rpimonitor/models"
@@ -28,24 +27,9 @@ func (m *Monitor) Register(router *mux.Router) {
 		Handler(m.Action(m.Index))
 	router.
 		Methods("GET").
-		Path("/temp").
-		Name("Temperature").
-		Handler(m.Action(m.Temp))
-	router.
-		Methods("GET").
-		Path("/cpu").
-		Name("CPU").
-		Handler(m.Action(m.CPU))
-	router.
-		Methods("GET").
-		Path("/mem").
-		Name("Memory").
-		Handler(m.Action(m.Mem))
-	router.
-		Methods("GET").
-		Path("/sys").
-		Name("Sys").
-		Handler(m.Action(m.Sys))
+		Path("/snapshot").
+		Name("Snapshot").
+		Handler(m.Action(m.Snapshot))
 }
 
 func (m *Monitor) Index(w http.ResponseWriter, r *http.Request) error {
@@ -53,42 +37,7 @@ func (m *Monitor) Index(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func (m *Monitor) Temp(w http.ResponseWriter, r *http.Request) error {
-	temp := models.Sample{
-		Name:  "Temperature",
-		Time:  time.Now(),
-		Value: "1",
-	}
-	m.JSON(w, http.StatusOK, temp)
-	return nil
-}
-
-func (m *Monitor) CPU(w http.ResponseWriter, r *http.Request) error {
-	cpu := models.Sample{
-		Name:  "CPU Load",
-		Time:  time.Now(),
-		Value: "1",
-	}
-	m.JSON(w, http.StatusOK, cpu)
-	return nil
-}
-
-func (m *Monitor) Mem(w http.ResponseWriter, r *http.Request) error {
-	mem := models.Sample{
-		Name:  "Free Memory",
-		Time:  time.Now(),
-		Value: "1",
-	}
-	m.JSON(w, http.StatusOK, mem)
-	return nil
-}
-
-func (m *Monitor) Sys(w http.ResponseWriter, r *http.Request) error {
-	sys := models.Sample{
-		Name:  "Sys Uptime",
-		Time:  time.Now(),
-		Value: "1",
-	}
-	m.JSON(w, http.StatusOK, sys)
+func (m *Monitor) Snapshot(w http.ResponseWriter, r *http.Request) error {
+	m.JSON(w, http.StatusOK, models.NewSample())
 	return nil
 }
