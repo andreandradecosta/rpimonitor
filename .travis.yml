@@ -3,6 +3,4 @@ go:
     - 1.5
     - tip
 env:
-    - GOOS=linux
-    - GOARCH=arm
-    - GOARM=7
+    - GOOS=linux GOARCH=arm GOARM=7
