@@ -3,7 +3,11 @@ package models
 import (
 	"time"
 
+	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/disk"
+	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
+	"github.com/shirou/gopsutil/net"
 )
 
 type Sample struct {
@@ -19,8 +23,12 @@ func NewSample() Sample {
 		Timestamp: now.Unix(),
 		Metrics:   make(map[string]interface{}),
 	}
-	vmem, _ := mem.VirtualMemory()
-	s.Metrics["Memory"] = vmem
-
+	s.Metrics["CPUTimes"], _ = cpu.CPUTimes(false)
+	s.Metrics["DiskIO"], _ = disk.DiskIOCounters()
+	s.Metrics["Load"], _ = load.LoadAvg()
+	s.Metrics["VirtualMemory"], _ = mem.VirtualMemory()
+	s.Metrics["SwapMemory"], _ = mem.SwapMemory()
+	s.Metrics["NetIO"], _ = net.NetIOCounters(true)
+	s.Metrics["NetProto"], _ = net.NetProtoCounters(nil)
 	return s
 }
