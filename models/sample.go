@@ -11,9 +11,9 @@ import (
 )
 
 type Sample struct {
-	LocalTime time.Time              `json:"local_time"`
-	Timestamp int64                  `json:"timestamp"`
-	Metrics   map[string]interface{} `json:"metrics"`
+	LocalTime time.Time `json:"local_time"`
+	Timestamp int64     `json:"timestamp"`
+	Metrics   Info      `json:"metrics"`
 }
 
 func NewSample() Sample {
@@ -21,14 +21,14 @@ func NewSample() Sample {
 	s := Sample{
 		LocalTime: now,
 		Timestamp: now.Unix(),
-		Metrics:   make(map[string]interface{}),
+		Metrics:   make(Info),
 	}
-	s.Metrics["CPUTimes"], _ = cpu.CPUTimes(false)
-	s.Metrics["DiskIO"], _ = disk.DiskIOCounters()
-	s.Metrics["Load"], _ = load.LoadAvg()
-	s.Metrics["VirtualMemory"], _ = mem.VirtualMemory()
-	s.Metrics["SwapMemory"], _ = mem.SwapMemory()
-	s.Metrics["NetIO"], _ = net.NetIOCounters(true)
-	s.Metrics["NetProto"], _ = net.NetProtoCounters(nil)
+	s.Metrics["cpu_times"] = getData(cpu.CPUTimes(false))
+	s.Metrics["disk_io"] = getData(disk.DiskIOCounters())
+	s.Metrics["load"] = getData(load.LoadAvg())
+	s.Metrics["virtual_memory"] = getData(mem.VirtualMemory())
+	s.Metrics["swap_memory"] = getData(mem.SwapMemory())
+	s.Metrics["net_io"] = getData(net.NetIOCounters(true))
+	s.Metrics["net_proto"] = getData(net.NetProtoCounters(nil))
 	return s
 }
