@@ -8,6 +8,7 @@ env:
     - GIMME_OS=linux GIMME_ARCH=arm
 
 script:
+  - go test -v ./...
   - go build -v
 
 
