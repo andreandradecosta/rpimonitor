@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"github.com/andreandradecosta/rpimonitor/hw"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/load"
@@ -30,5 +31,6 @@ func NewSample() Sample {
 	s.Metrics["swap_memory"] = getData(mem.SwapMemory())
 	s.Metrics["net_io"] = getData(net.NetIOCounters(true))
 	s.Metrics["net_proto"] = getData(net.NetProtoCounters(nil))
+	s.Metrics["temperature"] = getData(hw.GetTemperature())
 	return s
 }
