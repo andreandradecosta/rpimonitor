@@ -61,7 +61,6 @@ func main() {
 	addr := ":" + port
 	httpsAddr := ":" + httpsPort
 	l := log.New(os.Stdout, "[negroni] ", 0)
-	l.Printf("secure options %v", secureOptions)
 	l.Printf("listening on http://%s and https://%s", addr, httpsAddr)
 	// HTTP
 	go func() {
