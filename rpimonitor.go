@@ -31,7 +31,6 @@ func main() {
 		host = "localhost"
 	}
 	secureOptions := secure.Options{
-		AllowedHosts:          []string{host + ":" + port},
 		SSLRedirect:           true,
 		SSLHost:               host + ":" + httpsPort,
 		STSSeconds:            315360000,
