@@ -4,5 +4,5 @@
 package hw
 
 func GetTemperature() (string, error) {
-	return execute("/opt/vc/bin/vcgencmd", "measure_temp")
+	return execute("cat", "/sys/class/thermal/thermal_zone0/temp")
 }

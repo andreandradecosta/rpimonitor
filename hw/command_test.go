@@ -3,8 +3,8 @@ package hw
 import "testing"
 
 func TestExecute(t *testing.T) {
-	exp := "51'C"
-	got, err := execute("echo", "temp=51'C")
+	exp := "46.54"
+	got, err := execute("echo", "46540")
 	if err != nil {
 		t.Errorf("Error: %s", err)
 	}
