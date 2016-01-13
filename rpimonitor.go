@@ -20,7 +20,7 @@ func main() {
 	}
 	httpsPort := os.Getenv("HTTPS_PORT")
 	if httpsPort == "" {
-		httpsPort = "8443"
+		httpsPort = "443"
 	}
 	isDev, err := strconv.ParseBool(os.Getenv("IsDevelopment"))
 	if err != nil {
@@ -30,6 +30,15 @@ func main() {
 	if host == "" {
 		host = "localhost"
 	}
+	cert := os.Getenv("CERT")
+	if cert == "" {
+		cert = "cert.pem"
+	}
+	key := os.Getenv("KEY")
+	if key == "" {
+		key = "key.pem"
+	}
+
 	secureOptions := secure.Options{
 		SSLRedirect:           true,
 		SSLHost:               host + ":" + httpsPort,
@@ -65,5 +74,5 @@ func main() {
 	go func() {
 		log.Fatal(http.ListenAndServe(addr, n))
 	}()
-	l.Fatal(http.ListenAndServeTLS(httpsAddr, "cert.pem", "key.pem", n))
+	l.Fatal(http.ListenAndServeTLS(httpsAddr, cert, key, n))
 }
