@@ -33,7 +33,6 @@ func main() {
 		ContentTypeNosniff:    true,
 		BrowserXssFilter:      true,
 		ContentSecurityPolicy: "default-src 'self'",
-		PublicKey:             `pin-sha256="base64+primary=="; pin-sha256="base64+backup=="; max-age=5184000; includeSubdomains; report-uri="https://www.example.com/hpkp-report"`,
 		IsDevelopment:         *isDev,
 	}
 	secureMiddleware := secure.New(secureOptions)
@@ -58,5 +57,6 @@ func main() {
 	go func() {
 		log.Fatal(http.ListenAndServe(addr, n))
 	}()
+	// HTTPS
 	l.Fatal(http.ListenAndServeTLS(httpsAddr, *cert, *key, n))
 }
