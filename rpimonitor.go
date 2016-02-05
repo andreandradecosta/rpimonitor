@@ -17,7 +17,7 @@ import (
 func main() {
 	host := flag.String("HOST", "localhost", "Domain")
 	httpPort := flag.String("HTTP_PORT", "", "HTTP port")
-	httpsPort := flag.String("HTTPS_PORT", "443", "HTTPS port")
+	httpsPort := flag.String("HTTPS_PORT", "", "HTTPS port")
 	isDev := flag.Bool("IsDevelopment", false, "Is Dev Env.")
 	cert := flag.String("CERT", "cert.pem", "Certification path")
 	key := flag.String("KEY", "key.pem", "Private Key path")
@@ -61,7 +61,9 @@ func main() {
 
 	}
 	// HTTPS
-	httpsAddr := ":" + *httpsPort
-	l.Printf("listening on https://%s%s", *host, httpsAddr)
-	l.Fatal(http.ListenAndServeTLS(httpsAddr, *cert, *key, n))
+	if *httpsPort != "" {
+		httpsAddr := ":" + *httpsPort
+		l.Printf("listening on https://%s%s", *host, httpsAddr)
+		l.Fatal(http.ListenAndServeTLS(httpsAddr, *cert, *key, n))
+	}
 }
