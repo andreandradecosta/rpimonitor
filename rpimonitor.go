@@ -16,7 +16,7 @@ import (
 
 func main() {
 	host := flag.String("HOST", "localhost", "Domain")
-	httpPort := flag.String("HTTP_PORT", "8080", "HTTP port")
+	httpPort := flag.String("HTTP_PORT", "", "HTTP port")
 	httpsPort := flag.String("HTTPS_PORT", "443", "HTTPS port")
 	isDev := flag.Bool("IsDevelopment", false, "Is Dev Env.")
 	cert := flag.String("CERT", "cert.pem", "Certification path")
@@ -49,14 +49,19 @@ func main() {
 	n.Use(negroni.HandlerFunc(secureMiddleware.HandlerFuncWithNext))
 	n.UseHandler(router)
 
-	addr := ":" + *httpPort
-	httpsAddr := ":" + *httpsPort
 	l := log.New(os.Stdout, "[negroni] ", 0)
-	l.Printf("listening on http://%s%s and https://%s%s", *host, addr, *host, httpsAddr)
+
 	// HTTP
-	go func() {
-		log.Fatal(http.ListenAndServe(addr, n))
-	}()
+	if *httpPort != "" {
+		addr := ":" + *httpPort
+		l.Printf("listening on http://%s%s", *host, addr)
+		go func() {
+			log.Fatal(http.ListenAndServe(addr, n))
+		}()
+
+	}
 	// HTTPS
+	httpsAddr := ":" + *httpsPort
+	l.Printf("listening on https://%s%s", *host, httpsAddr)
 	l.Fatal(http.ListenAndServeTLS(httpsAddr, *cert, *key, n))
 }
