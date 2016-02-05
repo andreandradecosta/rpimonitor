@@ -33,7 +33,7 @@ func main() {
 }
 
 func startMonitor() {
-	ticker := time.NewTicker(time.Second * 5)
+	ticker := time.NewTicker(time.Hour * 1)
 	for t := range ticker.C {
 		fmt.Println("Tick at", t)
 	}
