@@ -2,8 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"time"
 
 	"github.com/andreandradecosta/rpimonitor/server"
 )
@@ -29,12 +27,6 @@ func main() {
 		}
 		s.Start()
 	}
-	startMonitor()
-}
-
-func startMonitor() {
-	ticker := time.NewTicker(time.Hour * 1)
-	for t := range ticker.C {
-		fmt.Println("Tick at", t)
-	}
+	m := &server.Monitor{}
+	m.Start()
 }
