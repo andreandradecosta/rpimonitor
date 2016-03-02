@@ -3,7 +3,6 @@ package server
 import (
 	"encoding/json"
 	"log"
-	"os"
 	"time"
 
 	"github.com/andreandradecosta/rpimonitor/models"
@@ -13,11 +12,9 @@ import (
 type Monitor struct {
 	Interval  time.Duration
 	RedisPool *redis.Pool
-	log       *log.Logger
 }
 
 func (m *Monitor) Start() {
-	m.log = log.New(os.Stdout, "[monitor] ", 0)
 	ticker := time.NewTicker(m.Interval)
 	for {
 		m.tick()
@@ -31,20 +28,20 @@ func (m *Monitor) tick() {
 	conn.Send("MULTI")
 	s := models.NewSample()
 	conn.Send("SET", "updated", s.Timestamp)
-	sample := m.toJSON(s)
+	sample := makeJSON(s)
 	conn.Send("SET", "snapshot", sample)
-	status := m.toJSON(models.NewStatus())
+	status := makeJSON(models.NewStatus())
 	conn.Send("SET", "status", status)
 	_, err := conn.Do("EXEC")
 	if err != nil {
-		m.log.Println(err)
+		log.Println(err)
 	}
 }
 
-func (m *Monitor) toJSON(data interface{}) []byte {
+func makeJSON(data interface{}) []byte {
 	json, err := json.Marshal(data)
 	if err != nil {
-		m.log.Println(err)
+		log.Println(err)
 		return nil
 	}
 	return json
