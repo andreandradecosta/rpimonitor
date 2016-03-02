@@ -2,8 +2,10 @@ package main
 
 import (
 	"flag"
+	"time"
 
 	"github.com/andreandradecosta/rpimonitor/server"
+	"github.com/garyburd/redigo/redis"
 )
 
 func main() {
@@ -14,8 +16,12 @@ func main() {
 	isDev := flag.Bool("IsDevelopment", false, "Is Dev Env.")
 	cert := flag.String("CERT", "cert.pem", "Certification path")
 	key := flag.String("KEY", "key.pem", "Private Key path")
+	sampleInterval := flag.Duration("SAMPLE_INTERVAL", time.Second*5, "Sampling interval")
+	redisHost := flag.String("REDIS_HOST", "localhost:6379", "Redis host:port")
+	redisPasswd := flag.String("REDIS_PASSWD", "", "Redis password")
 	flag.Parse()
 
+	redisPool := newPool(redisHost, redisPasswd)
 	if *startServer {
 		s := &server.HTTPServer{
 			Host:      *host,
@@ -27,6 +33,36 @@ func main() {
 		}
 		s.Start()
 	}
-	m := &server.Monitor{}
+	m := &server.Monitor{
+		Interval:  *sampleInterval,
+		RedisPool: redisPool,
+	}
 	m.Start()
+}
+
+func newPool(redisHost, redisPasswd *string) *redis.Pool {
+	return &redis.Pool{
+		Dial: func() (redis.Conn, error) {
+			c, err := redis.Dial("tcp", *redisHost)
+			if err != nil {
+				return nil, err
+			}
+			if *redisPasswd != "" {
+				if _, err := c.Do("AUTH", *redisPasswd); err != nil {
+					c.Close()
+					return nil, err
+				}
+			}
+			return c, err
+		},
+		TestOnBorrow: func(c redis.Conn, t time.Time) error {
+			_, err := c.Do("PING")
+			return err
+		},
+		MaxIdle:     3,
+		MaxActive:   10,
+		IdleTimeout: 5 * time.Hour,
+		Wait:        true,
+	}
+
 }
