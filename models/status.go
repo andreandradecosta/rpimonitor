@@ -6,7 +6,7 @@ import (
 	"github.com/shirou/gopsutil/host"
 )
 
-func NewIndex() Info {
+func NewStatus() Info {
 	i := make(Info)
 	i["cpu_info"] = getData(cpu.CPUInfo())
 	i["disk_usage"] = getData(disk.DiskUsage("/"))

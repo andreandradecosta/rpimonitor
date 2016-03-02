@@ -33,7 +33,7 @@ func (m *Monitor) tick() {
 	conn.Send("SET", "updated", s.Timestamp)
 	sample := m.toJSON(s)
 	conn.Send("SET", "snapshot", sample)
-	status := m.toJSON(models.NewIndex())
+	status := m.toJSON(models.NewStatus())
 	conn.Send("SET", "status", status)
 	_, err := conn.Do("EXEC")
 	if err != nil {

@@ -33,7 +33,7 @@ func (m *Monitor) Register(router *mux.Router) {
 }
 
 func (m *Monitor) Index(w http.ResponseWriter, r *http.Request) error {
-	m.JSON(w, http.StatusOK, models.NewIndex())
+	m.JSON(w, http.StatusOK, models.NewStatus())
 	return nil
 }
 
