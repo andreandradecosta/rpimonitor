@@ -34,14 +34,14 @@ func (m *Monitor) tick() {
 	conn.Send("SET", "status", status)
 	_, err := conn.Do("EXEC")
 	if err != nil {
-		log.Println(err)
+		log.Println("tick:", err)
 	}
 }
 
 func makeJSON(data interface{}) []byte {
 	json, err := json.Marshal(data)
 	if err != nil {
-		log.Println(err)
+		log.Println("makeJSON:", err)
 		return nil
 	}
 	return json
