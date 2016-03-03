@@ -1,17 +1,17 @@
 package main
 
 import (
-	"flag"
 	"log"
 	"time"
 
-	"gopkg.in/mgo.v2"
-
 	"github.com/andreandradecosta/rpimonitor/server"
 	"github.com/garyburd/redigo/redis"
+	"github.com/namsral/flag"
+	"gopkg.in/mgo.v2"
 )
 
 func main() {
+	config := flag.String("config", "", "Config file path")
 	startServer := flag.Bool("StartServer", false, "Start HTTP Server")
 	host := flag.String("HOST", "localhost", "Domain")
 	httpPort := flag.String("HTTP_PORT", "8080", "HTTP port")
@@ -25,6 +25,11 @@ func main() {
 	mongoURL := flag.String("MONGO_URL", "localhost", "mongodb://user:pass@host:port/database")
 
 	flag.Parse()
+
+	log.Println("Starting...")
+	if config != nil {
+		log.Println("Using ", *config)
+	}
 
 	if *startServer {
 		s := &server.HTTPServer{
