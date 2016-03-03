@@ -2,7 +2,10 @@ package main
 
 import (
 	"flag"
+	"log"
 	"time"
+
+	"gopkg.in/mgo.v2"
 
 	"github.com/andreandradecosta/rpimonitor/server"
 	"github.com/garyburd/redigo/redis"
@@ -19,9 +22,10 @@ func main() {
 	sampleInterval := flag.Duration("SAMPLE_INTERVAL", time.Second*5, "Sampling interval")
 	redisHost := flag.String("REDIS_HOST", "localhost:6379", "Redis host:port")
 	redisPasswd := flag.String("REDIS_PASSWD", "", "Redis password")
+	mongoURL := flag.String("MONGO_URL", "localhost", "mongodb://user:pass@host:port/database")
+
 	flag.Parse()
 
-	redisPool := newPool(redisHost, redisPasswd)
 	if *startServer {
 		s := &server.HTTPServer{
 			Host:      *host,
@@ -33,22 +37,27 @@ func main() {
 		}
 		s.Start()
 	}
+
+	redisPool := newRedisPool(*redisHost, *redisPasswd)
+	mongoSession := newMongoSession(*mongoURL)
+
 	m := &server.Monitor{
-		Interval:  *sampleInterval,
-		RedisPool: redisPool,
+		Interval:     *sampleInterval,
+		RedisPool:    redisPool,
+		MongoSession: mongoSession,
 	}
 	m.Start()
 }
 
-func newPool(redisHost, redisPasswd *string) *redis.Pool {
+func newRedisPool(redisHost, redisPasswd string) *redis.Pool {
 	return &redis.Pool{
 		Dial: func() (redis.Conn, error) {
-			c, err := redis.Dial("tcp", *redisHost)
+			c, err := redis.Dial("tcp", redisHost)
 			if err != nil {
 				return nil, err
 			}
-			if *redisPasswd != "" {
-				if _, err := c.Do("AUTH", *redisPasswd); err != nil {
+			if redisPasswd != "" {
+				if _, err := c.Do("AUTH", redisPasswd); err != nil {
 					c.Close()
 					return nil, err
 				}
@@ -64,5 +73,12 @@ func newPool(redisHost, redisPasswd *string) *redis.Pool {
 		IdleTimeout: 5 * time.Hour,
 		Wait:        true,
 	}
+}
 
+func newMongoSession(mongoURL string) *mgo.Session {
+	session, err := mgo.Dial(mongoURL)
+	if err != nil {
+		log.Fatalln("MongoDial:", err)
+	}
+	return session
 }

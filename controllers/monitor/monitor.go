@@ -32,6 +32,7 @@ func (m *Monitor) Register(router *mux.Router) {
 		Handler(m.Action(m.Snapshot))
 }
 
+//Usar session.Copy e depois session.Close()
 func (m *Monitor) Index(w http.ResponseWriter, r *http.Request) error {
 	m.JSON(w, http.StatusOK, models.NewStatus())
 	return nil
