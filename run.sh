@@ -1,2 +1,2 @@
 #!/bin/bash
-go run rpimonitor.go -config ./rpimonitor.conf
+go run rpimonitor.go -config ./.env

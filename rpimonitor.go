@@ -12,11 +12,11 @@ import (
 
 func main() {
 	config := flag.String("config", "", "Config file path")
-	startServer := flag.Bool("StartServer", false, "Start HTTP Server")
+	startServer := flag.Bool("START_SERVER", false, "Start HTTP Server")
 	host := flag.String("HOST", "localhost", "Domain")
 	httpPort := flag.String("HTTP_PORT", "8080", "HTTP port")
 	httpsPort := flag.String("HTTPS_PORT", "443", "HTTPS port")
-	isDev := flag.Bool("IsDevelopment", false, "Is Dev Env.")
+	isDev := flag.Bool("IS_DEVELOPMENT", false, "Is Dev Env.")
 	cert := flag.String("CERT", "cert.pem", "Certification path")
 	key := flag.String("KEY", "key.pem", "Private Key path")
 	sampleInterval := flag.Duration("SAMPLE_INTERVAL", time.Second*5, "Sampling interval")
@@ -27,11 +27,12 @@ func main() {
 	flag.Parse()
 
 	log.Println("Starting...")
-	if config != nil {
+	if *config != "" {
 		log.Println("Using ", *config)
 	}
 
 	if *startServer {
+		log.Println("... server")
 		s := &server.HTTPServer{
 			Host:      *host,
 			HTTPPort:  *httpPort,
@@ -51,6 +52,7 @@ func main() {
 		RedisPool:    redisPool,
 		MongoSession: mongoSession,
 	}
+	log.Println("... monitor")
 	m.Start()
 }
 
