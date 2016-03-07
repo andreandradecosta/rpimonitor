@@ -1,12 +1,18 @@
 package controllers
 
-import "net/http"
+import (
+	"net/http"
 
-type Action func(w http.ResponseWriter, r *http.Request) error
+	"gopkg.in/unrolled/render.v1"
+)
 
-type Controller struct{}
+type action func(w http.ResponseWriter, r *http.Request) error
 
-func (c *Controller) Action(a Action) http.Handler {
+type controller struct {
+	*render.Render
+}
+
+func (c *controller) handleAction(a action) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if err := a(w, r); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

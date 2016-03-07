@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/andreandradecosta/rpimonitor/controllers/monitor"
+	"github.com/andreandradecosta/rpimonitor/controllers"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
@@ -40,9 +40,8 @@ func (h *HTTPServer) Start() {
 	renderer := render.New(render.Options{
 		IndentJSON: true,
 	})
-
-	c := monitor.New(renderer)
-	c.Register(router)
+	controllers.NewStatus(renderer, router)
+	controllers.NewSample(renderer, router)
 
 	n := negroni.Classic()
 	n.Use(negroni.HandlerFunc(secureMiddleware.HandlerFuncWithNext))
