@@ -7,20 +7,26 @@ import (
 
 	"github.com/andreandradecosta/rpimonitor/controllers"
 	"github.com/codegangsta/negroni"
+	"github.com/garyburd/redigo/redis"
 	"github.com/gorilla/mux"
 	"github.com/unrolled/secure"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/unrolled/render.v1"
 )
 
+//HTTPServer represents the HTTP part of this app.
 type HTTPServer struct {
-	Host      string
-	HTTPPort  string
-	HTTPSPort string
-	IsDev     bool
-	Cert      string
-	Key       string
+	Host         string
+	HTTPPort     string
+	HTTPSPort    string
+	IsDev        bool
+	Cert         string
+	Key          string
+	RedisPool    *redis.Pool
+	MongoSession *mgo.Session
 }
 
+//Start configures the http server and starts listening requests.
 func (h *HTTPServer) Start() {
 	secureOptions := secure.Options{
 		SSLRedirect:           true,
@@ -40,8 +46,8 @@ func (h *HTTPServer) Start() {
 	renderer := render.New(render.Options{
 		IndentJSON: true,
 	})
-	controllers.NewStatus(renderer, router)
-	controllers.NewSample(renderer, router)
+	controllers.NewStatus(renderer, router, h.RedisPool)
+	controllers.NewSample(renderer, router, h.RedisPool, h.MongoSession)
 
 	n := negroni.Classic()
 	n.Use(negroni.HandlerFunc(secureMiddleware.HandlerFuncWithNext))

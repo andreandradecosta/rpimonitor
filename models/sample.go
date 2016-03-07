@@ -11,12 +11,14 @@ import (
 	"github.com/shirou/gopsutil/net"
 )
 
+//Sample holds data collected at some time.
 type Sample struct {
 	LocalTime time.Time `json:"local_time"`
 	Timestamp int64     `json:"timestamp"`
 	Metrics   Info      `json:"metrics"`
 }
 
+//NewSample collects the current host data.
 func NewSample() Sample {
 	now := time.Now()
 	s := Sample{

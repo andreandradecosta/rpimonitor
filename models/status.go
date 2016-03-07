@@ -6,6 +6,7 @@ import (
 	"github.com/shirou/gopsutil/host"
 )
 
+//NewStatus collects the current host status data.
 func NewStatus() Info {
 	i := make(Info)
 	i["cpu_info"] = getData(cpu.CPUInfo())

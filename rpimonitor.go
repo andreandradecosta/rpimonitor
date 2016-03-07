@@ -30,22 +30,23 @@ func main() {
 	if *config != "" {
 		log.Println("Using ", *config)
 	}
+	redisPool := newRedisPool(*redisHost, *redisPasswd)
+	mongoSession := newMongoSession(*mongoURL)
 
 	if *startServer {
 		log.Println("... server")
 		s := &server.HTTPServer{
-			Host:      *host,
-			HTTPPort:  *httpPort,
-			HTTPSPort: *httpsPort,
-			IsDev:     *isDev,
-			Cert:      *cert,
-			Key:       *key,
+			Host:         *host,
+			HTTPPort:     *httpPort,
+			HTTPSPort:    *httpsPort,
+			IsDev:        *isDev,
+			Cert:         *cert,
+			Key:          *key,
+			RedisPool:    redisPool,
+			MongoSession: mongoSession,
 		}
 		s.Start()
 	}
-
-	redisPool := newRedisPool(*redisHost, *redisPasswd)
-	mongoSession := newMongoSession(*mongoURL)
 
 	m := &server.Monitor{
 		Interval:     *sampleInterval,
