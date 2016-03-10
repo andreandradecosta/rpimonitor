@@ -1,4 +1,4 @@
-package server
+package monitor
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 
 	"gopkg.in/mgo.v2"
 
-	"github.com/andreandradecosta/rpimonitor/models"
+	"github.com/andreandradecosta/rpiMonitor/models"
 	"github.com/garyburd/redigo/redis"
 )
 
@@ -18,7 +18,7 @@ type Monitor struct {
 	MongoSession *mgo.Session
 }
 
-//Start starts the daemon at the specified interval
+//Start starts the daemon at the specified Interval
 func (m *Monitor) Start() {
 	ticker := time.NewTicker(m.Interval)
 	for {

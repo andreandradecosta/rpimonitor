@@ -1,1 +1,1 @@
-gin -p 8081 -a 8080 -i rpimonitor.go
+(cd server/cmd && gin --port 8081 --appPort 8080 --immediate)

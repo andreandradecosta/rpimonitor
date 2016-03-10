@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/andreandradecosta/rpimonitor/controllers"
+	"github.com/andreandradecosta/rpimonitor/server/controllers"
 	"github.com/codegangsta/negroni"
 	"github.com/garyburd/redigo/redis"
 	"github.com/gorilla/mux"
@@ -65,12 +65,10 @@ func (h *HTTPServer) Start() {
 
 	}
 	// HTTPS
-	if h.HTTPSPort != "" {
+	if h.HTTPPort != "" {
 		httpsAddr := ":" + h.HTTPSPort
 		l.Printf("listening on https://%s%s", h.Host, httpsAddr)
-		go func() {
-			l.Fatal(http.ListenAndServeTLS(httpsAddr, h.Cert, h.Key, n))
-		}()
+		l.Fatal(http.ListenAndServeTLS(httpsAddr, h.Cert, h.Key, n))
 	}
 
 }

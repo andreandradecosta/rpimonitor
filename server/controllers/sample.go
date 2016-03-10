@@ -71,16 +71,16 @@ func (s *sample) history(w http.ResponseWriter, r *http.Request) error {
 
 	err := c.
 		Find(bson.M{
-		"localtime": bson.M{
-			"$gte": start,
-			"$lte": stop,
-		},
-	}).
+			"localtime": bson.M{
+				"$gte": start,
+				"$lte": stop,
+			},
+		}).
 		Select(bson.M{
-		"localtime":              1,
-		"timestamp":              1,
-		"metrics.virtual_memory": 1,
-	}).
+			"localtime":              1,
+			"timestamp":              1,
+			"metrics.virtual_memory": 1,
+		}).
 		Sort("-localtime").
 		All(&result)
 	if err != nil {

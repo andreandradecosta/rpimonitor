@@ -1,13 +1,14 @@
 language: go
 
 go:
-    - 1.5
+    - 1.6
     - tip
 
 
 script:
   - go test -v ./...
-  - env GOOS=linux GOARCH=arm GOARM=7 go build -v
+  - env GOOS=linux GOARCH=arm GOARM=7 go build -v -o rpimonitor monitor/cmd/main.go
+  - go build -v -o rpiserver server/cmd/main.go
 
 
 deploy:
@@ -17,8 +18,9 @@ deploy:
   file:
       - README.md
       - rpimonitor
+      - rpiserver
   skip_cleanup: true
   on:
     repo: andreandradecosta/rpimonitor
     tags: true
-    go: 1.5
+    go: 1.6
