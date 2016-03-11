@@ -6,7 +6,6 @@ go:
 
 
 script:
-  - go test -v ./...
   - env GOOS=linux GOARCH=arm GOARM=7 go build -v -o rpimonitor monitor/cmd/main.go
   - go build -v -o rpiserver server/cmd/main.go
 
