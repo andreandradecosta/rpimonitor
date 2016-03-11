@@ -4,6 +4,7 @@ go:
     - 1.6
     - tip
 
+install:
 
 script:
   - env GOOS=linux GOARCH=arm GOARM=7 go build -v -o rpimonitor monitor/cmd/main.go
