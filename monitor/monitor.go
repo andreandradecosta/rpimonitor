@@ -7,7 +7,7 @@ import (
 
 	"gopkg.in/mgo.v2"
 
-	"github.com/andreandradecosta/rpiMonitor/models"
+	"github.com/andreandradecosta/rpimonitor/models"
 	"github.com/garyburd/redigo/redis"
 )
 
