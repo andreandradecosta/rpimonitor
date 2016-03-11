@@ -1,0 +1,125 @@
+{
+	"ImportPath": "github.com/andreandradecosta/rpimonitor",
+	"GoVersion": "go1.6",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/StackExchange/wmi",
+			"Rev": "f3e2bae1e0cb5aef83e319133eabfee30013a4a5"
+		},
+		{
+			"ImportPath": "github.com/andreandradecosta/rpiMonitor/models",
+			"Comment": "1.2.0",
+			"Rev": "f040f98e1dafbbe1a58fb88c1ce72770d848d50f"
+		},
+		{
+			"ImportPath": "github.com/codegangsta/negroni",
+			"Comment": "v0.1-70-gc7477ad",
+			"Rev": "c7477ad8e330bef55bf1ebe300cf8aa67c492d1b"
+		},
+		{
+			"ImportPath": "github.com/garyburd/redigo/internal",
+			"Rev": "4ed1111375cbeb698249ffe48dd463e9b0a63a7a"
+		},
+		{
+			"ImportPath": "github.com/garyburd/redigo/redis",
+			"Rev": "4ed1111375cbeb698249ffe48dd463e9b0a63a7a"
+		},
+		{
+			"ImportPath": "github.com/go-ole/go-ole",
+			"Comment": "v1.2.0-8-g4528ca3",
+			"Rev": "4528ca3fd1f79aeff5cad74425d0a60fb18a5761"
+		},
+		{
+			"ImportPath": "github.com/go-ole/go-ole/oleutil",
+			"Comment": "v1.2.0-8-g4528ca3",
+			"Rev": "4528ca3fd1f79aeff5cad74425d0a60fb18a5761"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "1ea25387ff6f684839d82767c1733ff4d4d15d0a"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Rev": "acf3be1b335c8ce30b2c8d51300984666f0ceefa"
+		},
+		{
+			"ImportPath": "github.com/namsral/flag",
+			"Rev": "881a43080604bcf99ab1118a814d1cb2c268fc36"
+		},
+		{
+			"ImportPath": "github.com/shirou/gopsutil/cpu",
+			"Comment": "1.0.0-310-g627d2a9",
+			"Rev": "627d2a98711da9c9a6f3e63cc76e19e0028b5fe5"
+		},
+		{
+			"ImportPath": "github.com/shirou/gopsutil/disk",
+			"Comment": "1.0.0-310-g627d2a9",
+			"Rev": "627d2a98711da9c9a6f3e63cc76e19e0028b5fe5"
+		},
+		{
+			"ImportPath": "github.com/shirou/gopsutil/host",
+			"Comment": "1.0.0-310-g627d2a9",
+			"Rev": "627d2a98711da9c9a6f3e63cc76e19e0028b5fe5"
+		},
+		{
+			"ImportPath": "github.com/shirou/gopsutil/internal/common",
+			"Comment": "1.0.0-310-g627d2a9",
+			"Rev": "627d2a98711da9c9a6f3e63cc76e19e0028b5fe5"
+		},
+		{
+			"ImportPath": "github.com/shirou/gopsutil/load",
+			"Comment": "1.0.0-310-g627d2a9",
+			"Rev": "627d2a98711da9c9a6f3e63cc76e19e0028b5fe5"
+		},
+		{
+			"ImportPath": "github.com/shirou/gopsutil/mem",
+			"Comment": "1.0.0-310-g627d2a9",
+			"Rev": "627d2a98711da9c9a6f3e63cc76e19e0028b5fe5"
+		},
+		{
+			"ImportPath": "github.com/shirou/gopsutil/net",
+			"Comment": "1.0.0-310-g627d2a9",
+			"Rev": "627d2a98711da9c9a6f3e63cc76e19e0028b5fe5"
+		},
+		{
+			"ImportPath": "github.com/shirou/gopsutil/process",
+			"Comment": "1.0.0-310-g627d2a9",
+			"Rev": "627d2a98711da9c9a6f3e63cc76e19e0028b5fe5"
+		},
+		{
+			"ImportPath": "github.com/shirou/w32",
+			"Rev": "3c9377fc6748f222729a8270fe2775d149a249ad"
+		},
+		{
+			"ImportPath": "github.com/unrolled/secure",
+			"Rev": "b0ad0b4c0762344ef305284e51dca6198c9464f0"
+		},
+		{
+			"ImportPath": "gopkg.in/mgo.v2",
+			"Comment": "r2016.02.04",
+			"Rev": "d90005c5262a3463800497ea5a89aed5fe22c886"
+		},
+		{
+			"ImportPath": "gopkg.in/mgo.v2/bson",
+			"Comment": "r2016.02.04",
+			"Rev": "d90005c5262a3463800497ea5a89aed5fe22c886"
+		},
+		{
+			"ImportPath": "gopkg.in/mgo.v2/internal/sasl",
+			"Comment": "r2016.02.04",
+			"Rev": "d90005c5262a3463800497ea5a89aed5fe22c886"
+		},
+		{
+			"ImportPath": "gopkg.in/mgo.v2/internal/scram",
+			"Comment": "r2016.02.04",
+			"Rev": "d90005c5262a3463800497ea5a89aed5fe22c886"
+		},
+		{
+			"ImportPath": "gopkg.in/unrolled/render.v1",
+			"Rev": "198ad4d8b8a4612176b804ca10555b222a086b40"
+		}
+	]
+}
