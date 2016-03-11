@@ -8,7 +8,14 @@ import (
 	"github.com/namsral/flag"
 )
 
+var (
+	commit  string
+	builtAt string
+)
+
 func main() {
+	log.Printf("Build info: %s @ %s", commit, builtAt)
+	
 	config := flag.String("config", "", "Config file path")
 	host := flag.String("HOST", "localhost", "Domain")
 	httpPort := flag.String("HTTP_PORT", "8080", "HTTP port")

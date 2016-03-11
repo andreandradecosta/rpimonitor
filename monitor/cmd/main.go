@@ -9,7 +9,14 @@ import (
 	"github.com/namsral/flag"
 )
 
+var (
+	commit  string
+	builtAt string
+)
+
 func main() {
+	log.Printf("Build info: %s @ %s", commit, builtAt)
+
 	config := flag.String("config", "", "Config file path")
 	sampleInterval := flag.Duration("SAMPLE_INTERVAL", time.Second*5, "Sampling interval")
 	redisHost := flag.String("REDIS_HOST", "localhost:6379", "Redis host:port")
