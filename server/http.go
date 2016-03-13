@@ -55,20 +55,19 @@ func (h *HTTPServer) Start() {
 
 	l := log.New(os.Stdout, "[negroni] ", 0)
 
-	// HTTP
-	if h.HTTPPort != "" {
-		addr := ":" + h.HTTPPort
-		l.Printf("listening on http://%s%s", h.Host, addr)
-		go func() {
-			l.Fatal(http.ListenAndServe(addr, n))
-		}()
-
-	}
 	// HTTPS
 	if h.HTTPPort != "" {
 		httpsAddr := ":" + h.HTTPSPort
 		l.Printf("listening on https://%s%s", h.Host, httpsAddr)
-		l.Fatal(http.ListenAndServeTLS(httpsAddr, h.Cert, h.Key, n))
+		go func() {
+			l.Fatal(http.ListenAndServeTLS(httpsAddr, h.Cert, h.Key, n))
+		}()
+	}
+	// HTTP
+	if h.HTTPPort != "" {
+		addr := ":" + h.HTTPPort
+		l.Printf("listening on http://%s%s", h.Host, addr)
+		l.Fatal(http.ListenAndServe(addr, n))
 	}
 
 }
