@@ -7,6 +7,7 @@ import (
 
 	"gopkg.in/mgo.v2"
 
+	"github.com/andreandradecosta/rpimonitor/hw"
 	"github.com/andreandradecosta/rpimonitor/models"
 	"github.com/garyburd/redigo/redis"
 )
@@ -29,7 +30,7 @@ func (m *Monitor) Start() {
 
 func (m *Monitor) saveData() {
 	defer m.MongoSession.Refresh()
-	s := models.NewSample()
+	s := hw.NewSample()
 	c := m.MongoSession.DB("rpimonitor").C("samples")
 	err := c.Insert(s)
 	if err != nil {
@@ -46,7 +47,7 @@ func (m *Monitor) cacheData(s models.Sample) {
 	conn.Send("SET", "updated", s.Timestamp)
 	sample := makeJSON(s)
 	conn.Send("SET", "snapshot", sample)
-	status := makeJSON(models.NewStatus())
+	status := makeJSON(hw.NewStatus())
 	conn.Send("SET", "status", status)
 	_, err := conn.Do("EXEC")
 	if err != nil {

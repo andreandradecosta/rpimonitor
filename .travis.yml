@@ -9,8 +9,6 @@ install:
 
 script:
   - env GOOS=linux GOARCH=arm GOARM=7 go build -ldflags "-X main.commit=`git rev-parse --short HEAD` -X main.builtAt=`date +%FT%T%z`" -v -o rpimonitor monitor/cmd/main.go
-  - go build -ldflags "-X main.commit=`git rev-parse --short HEAD` -X main.builtAt=`date +%FT%T%z`" -v -o rpiserver server/cmd/main.go
-
 
 deploy:
   provider: releases
@@ -19,7 +17,6 @@ deploy:
   file:
       - README.md
       - rpimonitor
-      - rpiserver
   skip_cleanup: true
   on:
     repo: andreandradecosta/rpimonitor
