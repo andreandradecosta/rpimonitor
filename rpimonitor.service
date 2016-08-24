@@ -1,0 +1,14 @@
+[Unit]
+Description=RPI Monitor
+After=network.target
+
+[Service]
+ExecStart=/opt/rpimonitor/rpimonitor -config env.conf
+Restart=always
+User=pi
+Group=pi
+WorkingDirectory=/opt/rpimonitor/
+StartLimitInterval=600
+
+[Install]
+WantedBy=multi-user.target
