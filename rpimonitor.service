@@ -3,11 +3,11 @@ Description=RPI Monitor
 After=network.target
 
 [Service]
-ExecStart=/opt/rpimonitor/rpimonitor -config env.conf
+ExecStart=/usr/local/rpimonitor/rpimonitor -config env.conf
 Restart=always
-User=pi
-Group=pi
-WorkingDirectory=/opt/rpimonitor/
+User=rpimonitor
+Group=rpimonitor
+WorkingDirectory=/usr/local/rpimonitor/
 StartLimitInterval=600
 
 [Install]
