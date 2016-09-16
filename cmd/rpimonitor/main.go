@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreandradecosta/rpimonitor/daemon"
 	"github.com/andreandradecosta/rpimonitor/device"
+	"github.com/andreandradecosta/rpimonitor/mongo"
 	"github.com/namsral/flag"
 )
 
@@ -20,7 +21,7 @@ func main() {
 	config := flag.String("config", "", "Config file path")
 	// redisHost := flag.String("REDIS_HOST", "localhost:6379", "Redis host:port")
 	// redisPasswd := flag.String("REDIS_PASSWD", "", "Redis password")
-	// mongoURL := flag.String("MONGO_URL", "localhost", "mongodb://user:pass@host:port/database")
+	mongoURL := flag.String("MONGO_URL", "localhost", "mongodb://user:pass@host:port/database")
 	sampleInterval := flag.Duration("SAMPLE_INTERVAL", time.Second*10, "Sampling interval")
 
 	flag.Parse()
@@ -30,10 +31,16 @@ func main() {
 		log.Println("Using ", *config)
 	}
 
-	m := &daemon.Daemon{
-		Interval: *sampleInterval,
-		Device:   &device.Device{},
+	device := &device.Device{}
+	mongo, err := mongo.NewSampleService(*mongoURL)
+	if err != nil {
+		log.Println("Mongo:", err)
 	}
-	m.Start()
+	daemon := &daemon.Daemon{
+		Interval: *sampleInterval,
+		Reader:   device,
+		Writer:   mongo,
+	}
+	daemon.Start()
 
 }

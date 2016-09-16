@@ -1,17 +1,16 @@
 package daemon
 
 import (
-	"bytes"
-	"encoding/json"
 	"log"
 	"time"
 
-	"github.com/andreandradecosta/rpimonitor/device"
+	"github.com/andreandradecosta/rpimonitor"
 )
 
 type Daemon struct {
 	Interval time.Duration
-	Device   *device.Device
+	Reader   rpimonitor.SampleReader
+	Writer   rpimonitor.SampleWriter
 }
 
 func (d *Daemon) Start() {
@@ -23,9 +22,12 @@ func (d *Daemon) Start() {
 }
 
 func (d *Daemon) sampleData() {
-	s, _ := d.Device.ReadSample()
-	b, _ := json.Marshal(s)
-	var out bytes.Buffer
-	json.Indent(&out, b, "", "\t")
-	log.Println(string(out.Bytes()))
+	s, err := d.Reader.ReadSample()
+	if err != nil {
+		log.Println("Error reading device data:", err)
+	}
+	err = d.Writer.Write(s)
+	if err != nil {
+		log.Println("Error persisting data:", err)
+	}
 }

@@ -10,9 +10,13 @@ type Sample struct {
 }
 
 type SampleReader interface {
-	ReadSample() (*Sample, error)
+	ReadSample() (Sample, error)
 }
 
 type SampleFetcher interface {
 	Query(start, end time.Time) ([]Sample, error)
+}
+
+type SampleWriter interface {
+	Write(sample Sample) error
 }
