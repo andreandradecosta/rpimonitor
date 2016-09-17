@@ -6,6 +6,7 @@ import (
 
 	"github.com/andreandradecosta/rpimonitor/daemon"
 	"github.com/andreandradecosta/rpimonitor/device"
+	"github.com/andreandradecosta/rpimonitor/echo"
 	"github.com/andreandradecosta/rpimonitor/mongo"
 	"github.com/namsral/flag"
 )
@@ -26,12 +27,19 @@ func main() {
 
 	flag.Parse()
 
-	log.Println("Starting monitor...")
 	if *config != "" {
 		log.Println("Using ", *config)
 	}
 
 	device := &device.Device{}
+
+	log.Println("Starting HTTP server...")
+	echo := &echo.Server{
+		StatusReader: device,
+	}
+	go echo.Start()
+
+	log.Println("Starting monitor...")
 	mongo, err := mongo.NewSampleService(*mongoURL)
 	if err != nil {
 		log.Println("Mongo:", err)
