@@ -26,3 +26,4 @@ gin-bin
 *.pem
 bin/
 .env
+.DS_Store
