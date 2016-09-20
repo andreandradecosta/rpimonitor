@@ -32,15 +32,16 @@ func main() {
 	}
 
 	device := &device.Device{}
+	mongo, err := mongo.NewSampleService(*mongoURL)
 
 	log.Println("Starting HTTP server...")
 	echo := &echo.Server{
-		StatusReader: device,
+		StatusReader:  device,
+		SampleFetcher: mongo,
 	}
 	go echo.Start()
 
 	log.Println("Starting monitor...")
-	mongo, err := mongo.NewSampleService(*mongoURL)
 	if err != nil {
 		log.Println("Mongo:", err)
 	}

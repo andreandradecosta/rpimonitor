@@ -4,9 +4,9 @@ import "time"
 
 //Sample holds data collected at some time.
 type Sample struct {
-	LocalTime time.Time `json:"localTime"`
-	Timestamp int64     `json:"timestamp"`
-	Metrics   Info      `json:"metrics"`
+	LocalTime time.Time `json:"localTime" bson:"localTime"`
+	Timestamp int64     `json:"timestamp" bson:"timestamp"`
+	Metrics   Info      `json:"metrics" bson:"metrics"`
 }
 
 type SampleReader interface {

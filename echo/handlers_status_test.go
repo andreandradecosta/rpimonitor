@@ -29,17 +29,20 @@ func (m *mockStatusReader) resultAsJSON() string {
 }
 
 func TestStatus(t *testing.T) {
-	t.Run("Status returns response", statusSuccess())
-	t.Run("Status return error", statusError())
+	e := echo.New()
+	mock := &mockStatusReader{}
+	server := &Server{
+		StatusReader: mock,
+	}
+	t.Run("Returns_Response", statusSuccess(e, mock, server))
+	t.Run("Return_Error", statusError(e, mock, server))
 }
 
-func statusSuccess() func(*testing.T) {
+func statusSuccess(e *echo.Echo, mock *mockStatusReader, server *Server) func(*testing.T) {
 	return func(t *testing.T) {
-		e := echo.New()
 		req, _ := http.NewRequest("GET", "/", nil)
 		rec := httptest.NewRecorder()
 		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
-		c.SetPath("/")
 		mock := &mockStatusReader{
 			result: rpimonitor.Status{LocalTime: time.Now()},
 		}
@@ -53,19 +56,12 @@ func statusSuccess() func(*testing.T) {
 	}
 }
 
-func statusError() func(*testing.T) {
+func statusError(e *echo.Echo, mock *mockStatusReader, server *Server) func(*testing.T) {
 	return func(t *testing.T) {
-		e := echo.New()
 		req, _ := http.NewRequest("GET", "/", nil)
 		rec := httptest.NewRecorder()
 		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
-		c.SetPath("/")
-		mock := &mockStatusReader{
-			err: errors.New("Error"),
-		}
-		server := &Server{
-			StatusReader: mock,
-		}
+		mock.err = errors.New("Device Error")
 		err := server.status(c)
 		if assert.Error(t, err) {
 			httpError, ok := err.(*echo.HTTPError)
