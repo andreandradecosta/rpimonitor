@@ -27,7 +27,7 @@ func (s *SampleService) Query(start, end time.Time) ([]rpimonitor.Sample, error)
 	session := s.mongoSession.Copy()
 	defer session.Close()
 	c := session.DB("rpimonitor").C("samples")
-	var result []rpimonitor.Sample
+	result := make([]rpimonitor.Sample, 1)
 	err := c.Find(bson.M{
 		"localTime": bson.M{
 			"$gte": start,
@@ -43,7 +43,6 @@ func (s *SampleService) Query(start, end time.Time) ([]rpimonitor.Sample, error)
 	}).Sort(
 		"-localTime",
 	).All(&result)
-
 	return result, err
 }
 
