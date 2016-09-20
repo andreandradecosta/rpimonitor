@@ -39,7 +39,6 @@ func TestHistory(t *testing.T) {
 	t.Run("Invalid_Date", invalidDate(e, server))
 	t.Run("Return_Samples", returnSamples(e, mock, server))
 	t.Run("Handle_Service_Error", handleServiceError(e, mock, server))
-	t.Run("ReturnEmpty", returnEmpty(e, mock, server))
 }
 
 func noParams(e *echo.Echo, server *Server) func(*testing.T) {

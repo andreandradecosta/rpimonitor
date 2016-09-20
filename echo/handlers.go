@@ -13,10 +13,19 @@ type handleError struct {
 
 func (s *Server) status(c echo.Context) error {
 	status, err := s.StatusReader.ReadStatus()
+	return handleDeviceRead(c, status, err)
+}
+
+func (s *Server) snapshot(c echo.Context) error {
+	sample, err := s.SampleReader.ReadSample()
+	return handleDeviceRead(c, sample, err)
+}
+
+func handleDeviceRead(c echo.Context, data interface{}, err error) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
-	return c.JSON(http.StatusOK, status)
+	return c.JSON(http.StatusOK, data)
 }
 
 func (s *Server) history(c echo.Context) error {

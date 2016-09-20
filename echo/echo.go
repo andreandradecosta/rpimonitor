@@ -11,6 +11,7 @@ import (
 type Server struct {
 	StatusReader  rpimonitor.StatusReader
 	SampleFetcher rpimonitor.SampleFetcher
+	SampleReader  rpimonitor.SampleReader
 }
 
 func (s *Server) Start() {
@@ -23,5 +24,6 @@ func (s *Server) Start() {
 	e.Static("/about", "static")
 	e.GET("/", s.status)
 	e.GET("/history", s.history)
+	e.GET("/snapshot", s.snapshot)
 	e.Run(standard.New(":8080"))
 }

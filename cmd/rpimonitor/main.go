@@ -38,6 +38,7 @@ func main() {
 	echo := &echo.Server{
 		StatusReader:  device,
 		SampleFetcher: mongo,
+		SampleReader:  device,
 	}
 	go echo.Start()
 
