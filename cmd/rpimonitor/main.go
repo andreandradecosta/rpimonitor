@@ -8,6 +8,7 @@ import (
 	"github.com/andreandradecosta/rpimonitor/device"
 	"github.com/andreandradecosta/rpimonitor/echo"
 	"github.com/andreandradecosta/rpimonitor/mongo"
+	"github.com/andreandradecosta/rpimonitor/redis"
 	"github.com/namsral/flag"
 )
 
@@ -20,10 +21,11 @@ func main() {
 	log.Printf("Build info: %s @ %s", commit, builtAt)
 
 	config := flag.String("config", "", "Config file path")
-	// redisHost := flag.String("REDIS_HOST", "localhost:6379", "Redis host:port")
-	// redisPasswd := flag.String("REDIS_PASSWD", "", "Redis password")
+	redisHost := flag.String("REDIS_HOST", "localhost:6379", "Redis host:port")
+	redisPasswd := flag.String("REDIS_PASSWD", "", "Redis password")
 	mongoURL := flag.String("MONGO_URL", "localhost", "mongodb://user:pass@host:port/database")
 	sampleInterval := flag.Duration("SAMPLE_INTERVAL", time.Second*10, "Sampling interval")
+	jwtSigningKey := flag.String("JWT_SIGNING_KEY", "", "JWT Signing Key")
 
 	flag.Parse()
 
@@ -33,19 +35,22 @@ func main() {
 
 	device := &device.Device{}
 	mongo, err := mongo.NewSampleService(*mongoURL)
+	if err != nil {
+		log.Println("Mongo:", err)
+	}
+	redis := redis.NewUserService(*redisHost, *redisPasswd)
 
 	log.Println("Starting HTTP server...")
 	echo := &echo.Server{
 		StatusReader:  device,
 		SampleFetcher: mongo,
 		SampleReader:  device,
+		UserManager:   redis,
+		JWTSigningKey: *jwtSigningKey,
 	}
 	go echo.Start()
 
 	log.Println("Starting monitor...")
-	if err != nil {
-		log.Println("Mongo:", err)
-	}
 	daemon := &daemon.Daemon{
 		Interval: *sampleInterval,
 		Reader:   device,
