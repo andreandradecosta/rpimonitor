@@ -40,26 +40,16 @@ func NewUserService(redisHost, redisPassword string) *UserService {
 	return &UserService{pool}
 }
 
-func (u *UserService) Fetch(login string) (*rpimonitor.User, error) {
+func (u *UserService) Authenticate(login, password string) (*rpimonitor.User, error) {
 	c := u.RedisPool.Get()
 	defer c.Close()
-	name, err := redis.String(c.Do("GET", fmt.Sprintf("user:%s:name", login)))
+	userData, err := redis.StringMap(c.Do("HGETALL", fmt.Sprintf("user:%s", login)))
 	if err != nil {
-		return nil, errors.Wrapf(err, "Fetch %s failed", login)
+		return nil, errors.Wrapf(err, "Fetch %s user failed", login)
 	}
-	if name != "" {
-		return &rpimonitor.User{Login: login, Name: name}, nil
-	}
-	return nil, rpimonitor.NotFound
-}
-
-func (u *UserService) Authenticate(login, password string) (bool, error) {
-	c := u.RedisPool.Get()
-	defer c.Close()
-	hash, err := redis.String(c.Do("GET", fmt.Sprintf("user:%s:hash", login)))
+	err = bcrypt.CompareHashAndPassword([]byte(userData["hash"]), []byte(password))
 	if err != nil {
-		return false, errors.Wrapf(err, "Fetch %s hash failed", login)
+		return nil, nil
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil, nil
+	return &rpimonitor.User{Login: login, Name: userData["name"]}, nil
 }

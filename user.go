@@ -10,6 +10,5 @@ type User struct {
 var NotFound = errors.New("User not found")
 
 type UserManager interface {
-	Fetch(login string) (*User, error)
-	Authenticate(login, password string) (bool, error)
+	Authenticate(login, password string) (*User, error)
 }

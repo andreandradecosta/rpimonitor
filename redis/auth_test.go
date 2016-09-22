@@ -5,6 +5,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
+	"github.com/andreandradecosta/rpimonitor"
 	"github.com/garyburd/redigo/redis"
 	"github.com/pkg/errors"
 	"github.com/rafaeljusto/redigomock"
@@ -26,13 +27,21 @@ func TestAuthentication(t *testing.T) {
 
 func authOk(userService *UserService, mockConn *redigomock.Conn) func(*testing.T) {
 	return func(t *testing.T) {
+		exp := &rpimonitor.User{
+			Login: "andre",
+			Name:  "Andre Costa",
+		}
 		pass := "password"
 		hash, _ := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
+		servRes := map[string]string{
+			"name": exp.Name,
+			"hash": string(hash),
+		}
 		mockConn.Clear()
-		mockConn.Command("GET", "user:andre:hash").Expect(hash)
-		aut, err := userService.Authenticate("andre", pass)
+		mockConn.Command("HGETALL", "user:andre").ExpectMap(servRes)
+		act, err := userService.Authenticate("andre", pass)
 		if assert.NoError(t, err) {
-			assert.True(t, aut)
+			assert.Equal(t, exp, act)
 		}
 	}
 }
@@ -40,10 +49,10 @@ func authOk(userService *UserService, mockConn *redigomock.Conn) func(*testing.T
 func authFail(userService *UserService, mockConn *redigomock.Conn) func(*testing.T) {
 	return func(t *testing.T) {
 		mockConn.Clear()
-		mockConn.Command("GET", redigomock.NewAnyData()).Expect("")
-		aut, err := userService.Authenticate("not_andre", "his pass")
+		mockConn.Command("HGETALL", redigomock.NewAnyData()).ExpectMap(map[string]string{})
+		act, err := userService.Authenticate("not_andre", "his pass")
 		if assert.NoError(t, err) {
-			assert.False(t, aut)
+			assert.Nil(t, act)
 		}
 	}
 }
@@ -52,7 +61,7 @@ func authError(userService *UserService, mockConn *redigomock.Conn) func(*testin
 	return func(t *testing.T) {
 		mockConn.Clear()
 		exp := errors.New("Connection error")
-		mockConn.Command("GET", "user:andre:hash").ExpectError(exp)
+		mockConn.Command("HGETALL", redigomock.NewAnyData()).ExpectError(exp)
 		_, err := userService.Authenticate("andre", "password")
 		if assert.Error(t, err) {
 			assert.Equal(t, exp, errors.Cause(err))

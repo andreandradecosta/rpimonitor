@@ -6,25 +6,29 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
+	"github.com/pkg/errors"
 )
 
 func (s *Server) login(c echo.Context) error {
 	login := c.FormValue("login")
 	password := c.FormValue("password")
-	if ok, _ := s.UserManager.Authenticate(login, password); ok {
-		user, _ := s.UserManager.Fetch(login)
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-			"login": user.Login,
-			"name":  user.Name,
-		})
-		tokenString, err := token.SignedString([]byte(s.JWTSigningKey))
-		if err != nil {
-			log.Println("Error signing token", err)
-			return echo.NewHTTPError(http.StatusInternalServerError, "Error during authentication.")
-		}
-		return c.JSON(http.StatusOK, map[string]string{
-			"token": tokenString,
-		})
+	user, err := s.UserManager.Authenticate(login, password)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, errors.Wrap(err, "Error during auth process").Error())
 	}
-	return echo.ErrUnauthorized
+	if user == nil {
+		return echo.ErrUnauthorized
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"login": user.Login,
+		"name":  user.Name,
+	})
+	tokenString, err := token.SignedString([]byte(s.JWTSigningKey))
+	if err != nil {
+		log.Println("Error signing token", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "Error during authentication.")
+	}
+	return c.JSON(http.StatusOK, map[string]string{
+		"token": tokenString,
+	})
 }
