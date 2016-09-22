@@ -44,7 +44,7 @@ func TestHistory(t *testing.T) {
 func noParams(e *echo.Echo, server *Server) func(*testing.T) {
 	return func(t *testing.T) {
 		rec := httptest.NewRecorder()
-		req, err := http.NewRequest("GET", "/history", nil)
+		req, err := http.NewRequest(echo.GET, "/history", nil)
 		if assert.NoError(t, err) {
 			c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
 			if assert.NoError(t, server.history(c)) {
