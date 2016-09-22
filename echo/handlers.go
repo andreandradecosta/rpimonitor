@@ -8,7 +8,7 @@ import (
 )
 
 type handleError struct {
-	Msg string `json:"Error"`
+	Msg string `json:"error"`
 }
 
 func (s *Server) status(c echo.Context) error {

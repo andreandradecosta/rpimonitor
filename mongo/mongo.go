@@ -1,10 +1,10 @@
 package mongo
 
 import (
-	"errors"
 	"time"
 
 	"github.com/andreandradecosta/rpimonitor"
+	"github.com/pkg/errors"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -17,7 +17,7 @@ func NewSampleService(url string) (*SampleService, error) {
 	session, err := mgo.Dial(url)
 	return &SampleService{
 		mongoSession: session,
-	}, err
+	}, errors.Wrap(err, "error connecting to mongo")
 }
 
 func (s *SampleService) Query(start, end time.Time) ([]rpimonitor.Sample, error) {
@@ -43,7 +43,7 @@ func (s *SampleService) Query(start, end time.Time) ([]rpimonitor.Sample, error)
 	}).Sort(
 		"-localTime",
 	).All(&result)
-	return result, err
+	return result, errors.Wrapf(err, "query failed [%s]-[%s]", start, end)
 }
 
 func (s *SampleService) Write(sample *rpimonitor.Sample) error {

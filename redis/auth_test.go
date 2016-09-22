@@ -1,12 +1,12 @@
 package redis
 
 import (
-	"errors"
 	"testing"
 
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/garyburd/redigo/redis"
+	"github.com/pkg/errors"
 	"github.com/rafaeljusto/redigomock"
 	"github.com/stretchr/testify/assert"
 )
@@ -55,7 +55,7 @@ func authError(userService *UserService, mockConn *redigomock.Conn) func(*testin
 		mockConn.Command("GET", "user:andre:hash").ExpectError(exp)
 		_, err := userService.Authenticate("andre", "password")
 		if assert.Error(t, err) {
-			assert.Equal(t, exp, err)
+			assert.Equal(t, exp, errors.Cause(err))
 		}
 	}
 }

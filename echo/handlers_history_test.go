@@ -49,7 +49,7 @@ func noParams(e *echo.Echo, server *Server) func(*testing.T) {
 			c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
 			if assert.NoError(t, server.history(c)) {
 				assert.Equal(t, http.StatusOK, rec.Code)
-				assert.Regexp(t, "Error", rec.Body.String())
+				assert.Regexp(t, "error", rec.Body.String())
 			}
 
 		}
@@ -66,7 +66,7 @@ func invalidDate(e *echo.Echo, server *Server) func(*testing.T) {
 		c := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
 		if assert.NoError(t, server.history(c)) {
 			assert.Equal(t, http.StatusOK, rec.Code)
-			assert.Regexp(t, "Error", rec.Body.String())
+			assert.Regexp(t, "error", rec.Body.String())
 		}
 	}
 }

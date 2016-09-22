@@ -8,6 +8,7 @@ import (
 
 	"github.com/andreandradecosta/rpimonitor"
 	"github.com/garyburd/redigo/redis"
+	"github.com/pkg/errors"
 )
 
 type UserService struct {
@@ -44,7 +45,7 @@ func (u *UserService) Fetch(login string) (*rpimonitor.User, error) {
 	defer c.Close()
 	name, err := redis.String(c.Do("GET", fmt.Sprintf("user:%s:name", login)))
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "Fetch %s failed", login)
 	}
 	if name != "" {
 		return &rpimonitor.User{Login: login, Name: name}, nil
@@ -57,7 +58,7 @@ func (u *UserService) Authenticate(login, password string) (bool, error) {
 	defer c.Close()
 	hash, err := redis.String(c.Do("GET", fmt.Sprintf("user:%s:hash", login)))
 	if err != nil {
-		return false, err
+		return false, errors.Wrapf(err, "Fetch %s hash failed", login)
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil, nil

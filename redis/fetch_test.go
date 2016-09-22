@@ -1,11 +1,11 @@
 package redis
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/andreandradecosta/rpimonitor"
 	"github.com/garyburd/redigo/redis"
+	"github.com/pkg/errors"
 	"github.com/rafaeljusto/redigomock"
 	"github.com/stretchr/testify/assert"
 )
@@ -58,7 +58,7 @@ func fetchError(userService *UserService, mockConn *redigomock.Conn) func(*testi
 		mockConn.Command("GET", "user:andre:name").ExpectError(exp)
 		_, err := userService.Fetch("andre")
 		if assert.Error(t, err) {
-			assert.Equal(t, exp, err)
+			assert.Equal(t, exp, errors.Cause(err))
 		}
 	}
 }
