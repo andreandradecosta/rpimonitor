@@ -14,12 +14,13 @@ type Server struct {
 	SampleReader  rpimonitor.SampleReader
 	UserManager   rpimonitor.UserManager
 	JWTSigningKey string
+	Debug         bool
 }
 
 func (s *Server) Start() {
 	e := echo.New()
 	e.SetLogLevel(log.ERROR)
-	e.SetDebug(true)
+	e.SetDebug(s.Debug)
 	e.Pre(middleware.HTTPSRedirect())
 	e.Use(middleware.Secure())
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{

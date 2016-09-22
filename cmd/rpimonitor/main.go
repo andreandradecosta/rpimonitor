@@ -26,6 +26,7 @@ func main() {
 	mongoURL := flag.String("MONGO_URL", "localhost", "mongodb://user:pass@host:port/database")
 	sampleInterval := flag.Duration("SAMPLE_INTERVAL", time.Second*10, "Sampling interval")
 	jwtSigningKey := flag.String("JWT_SIGNING_KEY", "", "JWT Signing Key")
+	debug := flag.Bool("DEBUG", false, "HTTP Server debug")
 
 	flag.Parse()
 
@@ -47,6 +48,7 @@ func main() {
 		SampleReader:  device,
 		UserManager:   redis,
 		JWTSigningKey: *jwtSigningKey,
+		Debug:         *debug,
 	}
 	go echo.Start()
 
