@@ -26,7 +26,7 @@ func TestFetch(t *testing.T) {
 
 func found(userService *UserService, mockConn *redigomock.Conn) func(*testing.T) {
 	return func(t *testing.T) {
-		exp := rpimonitor.User{
+		exp := &rpimonitor.User{
 			Login: "andre",
 			Name:  "Andre Costa",
 		}
@@ -46,7 +46,7 @@ func notFound(userService *UserService, mockConn *redigomock.Conn) func(*testing
 		actual, err := userService.Fetch("not_andre")
 		if assert.Error(t, err) {
 			assert.Equal(t, rpimonitor.NotFound, err)
-			assert.Equal(t, rpimonitor.User{}, actual)
+			assert.Nil(t, actual)
 		}
 	}
 }

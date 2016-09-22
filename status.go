@@ -8,5 +8,5 @@ type Status struct {
 }
 
 type StatusReader interface {
-	ReadStatus() (Status, error)
+	ReadStatus() (*Status, error)
 }

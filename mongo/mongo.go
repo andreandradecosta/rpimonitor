@@ -46,7 +46,7 @@ func (s *SampleService) Query(start, end time.Time) ([]rpimonitor.Sample, error)
 	return result, err
 }
 
-func (s *SampleService) Write(sample rpimonitor.Sample) error {
+func (s *SampleService) Write(sample *rpimonitor.Sample) error {
 	if s.mongoSession == nil {
 		return errors.New("No session to Mongo")
 	}

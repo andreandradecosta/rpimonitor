@@ -10,7 +10,7 @@ type Sample struct {
 }
 
 type SampleReader interface {
-	ReadSample() (Sample, error)
+	ReadSample() (*Sample, error)
 }
 
 type SampleFetcher interface {
@@ -18,5 +18,5 @@ type SampleFetcher interface {
 }
 
 type SampleWriter interface {
-	Write(sample Sample) error
+	Write(sample *Sample) error
 }

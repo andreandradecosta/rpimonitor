@@ -39,17 +39,17 @@ func NewUserService(redisHost, redisPassword string) *UserService {
 	return &UserService{pool}
 }
 
-func (u *UserService) Fetch(login string) (rpimonitor.User, error) {
+func (u *UserService) Fetch(login string) (*rpimonitor.User, error) {
 	c := u.RedisPool.Get()
 	defer c.Close()
 	name, err := redis.String(c.Do("GET", fmt.Sprintf("user:%s:name", login)))
 	if err != nil {
-		return rpimonitor.User{}, err
+		return nil, err
 	}
 	if name != "" {
-		return rpimonitor.User{Login: login, Name: name}, nil
+		return &rpimonitor.User{Login: login, Name: name}, nil
 	}
-	return rpimonitor.User{}, rpimonitor.NotFound
+	return nil, rpimonitor.NotFound
 }
 
 func (u *UserService) Authenticate(login, password string) (bool, error) {

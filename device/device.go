@@ -16,9 +16,9 @@ import (
 type Device struct {
 }
 
-func (d *Device) ReadSample() (rpimonitor.Sample, error) {
+func (d *Device) ReadSample() (*rpimonitor.Sample, error) {
 	now := time.Now()
-	s := rpimonitor.Sample{
+	s := &rpimonitor.Sample{
 		LocalTime: now,
 		Timestamp: now.Unix(),
 		Metrics:   make(rpimonitor.Info),
@@ -34,9 +34,9 @@ func (d *Device) ReadSample() (rpimonitor.Sample, error) {
 	return s, nil
 }
 
-func (d *Device) ReadStatus() (rpimonitor.Status, error) {
+func (d *Device) ReadStatus() (*rpimonitor.Status, error) {
 	now := time.Now()
-	s := rpimonitor.Status{
+	s := &rpimonitor.Status{
 		LocalTime: now,
 		Metrics:   make(rpimonitor.Info),
 	}
