@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
+//Server is responsible to start the echo HTTP server.
 type Server struct {
 	StatusReader  rpimonitor.StatusReader
 	SampleFetcher rpimonitor.SampleFetcher
@@ -17,6 +18,7 @@ type Server struct {
 	Debug         bool
 }
 
+//Start configures the echo framework and starts the HTTP server.
 func (s *Server) Start() {
 	e := echo.New()
 	e.SetLogLevel(log.ERROR)

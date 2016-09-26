@@ -13,9 +13,11 @@ import (
 	"github.com/shirou/gopsutil/net"
 )
 
+//Device represents the machine that is monitored.
 type Device struct {
 }
 
+//ReadSample extract various metrics in the current time.
 func (d *Device) ReadSample() (*rpimonitor.Sample, error) {
 	now := time.Now()
 	s := &rpimonitor.Sample{
@@ -34,6 +36,7 @@ func (d *Device) ReadSample() (*rpimonitor.Sample, error) {
 	return s, nil
 }
 
+//ReadStatus extract static info about this device.
 func (d *Device) ReadStatus() (*rpimonitor.Status, error) {
 	now := time.Now()
 	s := &rpimonitor.Status{
