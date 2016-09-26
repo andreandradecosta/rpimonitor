@@ -8,7 +8,7 @@ import (
 
 func TestParse(t *testing.T) {
 	t.Run("46540=>46.54", parseSuccess("46540", "46.54"))
-	t.Run("-46540=>-46.54", parseSuccess("-46540", "-46.54"))
+	t.Run("-46540=>-46.54", parseSuccess("-46540", "-46.541"))
 	t.Run("xxx=>Error", parseError("xxx"))
 }
 
