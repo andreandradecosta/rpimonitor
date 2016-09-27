@@ -5,11 +5,17 @@ go:
     - tip
 
 install:
-  - true
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
+  - go get github.com/go-playground/overalls
 
 script:
   - go test $(go list ./... | grep -v /vendor/)
+  - $GOPATH/bin/overalls -project=github.com/andreandradecosta/rpimonitor -covermode=count -ignore=.git,vendor,cmd -debug
   - env GOOS=linux GOARCH=arm GOARM=7 go build -ldflags "-X main.commit=`git rev-parse --short HEAD` -X main.builtAt=`date +%FT%T%z`" -v -o rpimonitor cmd/rpimonitor/main.go
+
+after_success:
+  - $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service=travis-ci
 
 deploy:
   provider: releases
