@@ -43,6 +43,7 @@ func (s *SampleService) Query(start, end time.Time) ([]rpimonitor.Sample, error)
 		"metrics.virtualMemory": 1,
 		"metrics.swapMemory":    1,
 		"metrics.temperature":   1,
+		"metrics.daysUptime":    1,
 	}).Sort(
 		"-localTime",
 	).All(&result)

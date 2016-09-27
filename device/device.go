@@ -33,6 +33,10 @@ func (d *Device) ReadSample() (*rpimonitor.Sample, error) {
 	s.Metrics["netIO"] = getData(net.IOCounters(true))
 	s.Metrics["netProto"] = getData(net.ProtoCounters(nil))
 	s.Metrics["temperature"] = getData(GetTemperature())
+	uptime, err := host.Uptime()
+	if err == nil {
+		s.Metrics["daysUptime"] = uptime / (60 * 60 * 24)
+	}
 	return s, nil
 }
 
