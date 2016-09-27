@@ -9,5 +9,5 @@ My Raspberry Pi Monitor
 [Build-URL]: https://travis-ci.org/andreandradecosta/rpimonitor
 [Report-Image]:https://goreportcard.com/badge/github.com/andreandradecosta/rpimonitor
 [Report-URL]: https://goreportcard.com/report/github.com/andreandradecosta/rpimonitor
-[Coverage-Image]: https://coveralls.io/repos/github/andreandradecosta/rpimonitor/badge.svg
-[Coverage-URL]: https://coveralls.io/github/andreandradecosta/rpimonitor
+[Coverage-Image]: https://coveralls.io/repos/github/andreandradecosta/rpimonitor/badge.svg?branch=master
+[Coverage-URL]: https://coveralls.io/github/andreandradecosta/rpimonitor?branch=master
