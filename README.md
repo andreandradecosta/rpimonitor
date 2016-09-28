@@ -1,9 +1,11 @@
 
-[![Build][Build-Image]][Build-URL] [![Go Report Card][Report-Image]][Report-URL] [![Coverage Status][Coverage-Image]][Coverage-URL]
 
 # rpimonitor
+---
+[![Build][Build-Image]][Build-URL] [![Go Report Card][Report-Image]][Report-URL] [![Coverage Status][Coverage-Image]][Coverage-URL]
 
 My Raspberry Pi Monitor
+
 
 [Build-Image]:https://travis-ci.org/andreandradecosta/rpimonitor.svg?branch=master
 [Build-URL]: https://travis-ci.org/andreandradecosta/rpimonitor
