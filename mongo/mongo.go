@@ -9,12 +9,12 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-//SampleService is responsible for interacting with Mongo DB.
+// SampleService is responsible for interacting with Mongo DB.
 type SampleService struct {
 	mongoSession *mgo.Session
 }
 
-//NewSampleService connects do Mongo and returns a service instance.
+// NewSampleService connects do Mongo and returns a service instance.
 func NewSampleService(url string) (*SampleService, error) {
 	session, err := mgo.Dial(url)
 	return &SampleService{
@@ -22,7 +22,7 @@ func NewSampleService(url string) (*SampleService, error) {
 	}, errors.Wrap(err, "error connecting to mongo")
 }
 
-//Query returns a collections of samples stored in the specified time interval.
+// Query returns a collections of samples stored in the specified time interval.
 func (s *SampleService) Query(start, end time.Time) ([]rpimonitor.Sample, error) {
 	if s.mongoSession == nil {
 		return nil, errors.New("No session to Mongo")
@@ -50,7 +50,7 @@ func (s *SampleService) Query(start, end time.Time) ([]rpimonitor.Sample, error)
 	return result, errors.Wrapf(err, "query failed [%s]-[%s]", start, end)
 }
 
-//Write stores a sample metrics in the database.
+// Write stores a sample metrics in the database.
 func (s *SampleService) Write(sample *rpimonitor.Sample) error {
 	if s.mongoSession == nil {
 		return errors.New("No session to Mongo")

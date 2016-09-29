@@ -11,12 +11,12 @@ import (
 	"github.com/pkg/errors"
 )
 
-//UserService is responsible for interacting with Redis database.
+// UserService is responsible for interacting with Redis database.
 type UserService struct {
 	RedisPool *redis.Pool
 }
 
-//NewUserService constructs the Redis pool and returns an instance of UserService.
+// NewUserService constructs the Redis pool and returns an instance of UserService.
 func NewUserService(redisHost, redisPassword string) *UserService {
 	pool := &redis.Pool{
 		Dial: func() (redis.Conn, error) {
@@ -42,7 +42,7 @@ func NewUserService(redisHost, redisPassword string) *UserService {
 	return &UserService{pool}
 }
 
-//Authenticate returns a user if success to authenticate, and nil otherwise.
+// Authenticate returns a user if success to authenticate, and nil otherwise.
 func (u *UserService) Authenticate(login, password string) (*rpimonitor.User, error) {
 	c := u.RedisPool.Get()
 	defer c.Close()

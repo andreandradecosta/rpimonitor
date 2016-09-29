@@ -1,4 +1,4 @@
 package rpimonitor
 
-//Info is a basic data type
+// Info is a basic data type
 type Info map[string]interface{}

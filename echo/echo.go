@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-//Server is responsible to start the echo HTTP server.
+// Server is responsible to start the echo HTTP server.
 type Server struct {
 	device        rpimonitor.Device
 	sampleFetcher rpimonitor.SampleFetcher
@@ -17,10 +17,10 @@ type Server struct {
 	debug         bool
 }
 
-//Option is functional argument
+// Option is functional argument
 type Option func(*Server)
 
-//New creates and configures a Echo HTTP Server
+// New creates and configures a Echo HTTP Server
 func New(key string, options ...Option) *Server {
 	s := &Server{
 		jwtSigningKey: key,
@@ -31,35 +31,35 @@ func New(key string, options ...Option) *Server {
 	return s
 }
 
-//WithDebug sets the debug options of echo HTTP Server
+// WithDebug sets the debug options of echo HTTP Server
 func WithDebug(d bool) Option {
 	return func(s *Server) {
 		s.debug = d
 	}
 }
 
-//WithDevice sets the component responsible for collecting device status. (e.g. Hardware)
+// WithDevice sets the component responsible for collecting device status. (e.g. Hardware)
 func WithDevice(d rpimonitor.Device) Option {
 	return func(s *Server) {
 		s.device = d
 	}
 }
 
-//WithSampleFetcher sets the component responsible for searching for samples.
+// WithSampleFetcher sets the component responsible for searching for samples.
 func WithSampleFetcher(sf rpimonitor.SampleFetcher) Option {
 	return func(s *Server) {
 		s.sampleFetcher = sf
 	}
 }
 
-//WithUserManager sets the component for fetching and authenticating users.
+// WithUserManager sets the component for fetching and authenticating users.
 func WithUserManager(um rpimonitor.UserManager) Option {
 	return func(s *Server) {
 		s.userManager = um
 	}
 }
 
-//Start configures the echo framework and starts the HTTP server.
+// Start configures the echo framework and starts the HTTP server.
 func (s *Server) Start() {
 	e := echo.New()
 	e.SetLogLevel(log.ERROR)
