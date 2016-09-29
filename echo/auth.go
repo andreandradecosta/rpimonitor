@@ -12,7 +12,7 @@ import (
 func (s *Server) login(c echo.Context) error {
 	login := c.FormValue("login")
 	password := c.FormValue("password")
-	user, err := s.UserManager.Authenticate(login, password)
+	user, err := s.userManager.Authenticate(login, password)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, errors.Wrap(err, "Error during auth process").Error())
 	}
@@ -23,7 +23,7 @@ func (s *Server) login(c echo.Context) error {
 		"login": user.Login,
 		"name":  user.Name,
 	})
-	tokenString, err := token.SignedString([]byte(s.JWTSigningKey))
+	tokenString, err := token.SignedString([]byte(s.jwtSigningKey))
 	if err != nil {
 		log.Println("Error signing token", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, "Error during authentication.")

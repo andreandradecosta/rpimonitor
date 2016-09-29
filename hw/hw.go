@@ -1,4 +1,4 @@
-package device
+package hw
 
 import (
 	"time"
@@ -13,12 +13,12 @@ import (
 	"github.com/shirou/gopsutil/net"
 )
 
-//Device represents the machine that is monitored.
-type Device struct {
+//Hardware represents the machine that is monitored.
+type Hardware struct {
 }
 
 //ReadSample extract various metrics in the current time.
-func (d *Device) ReadSample() (*rpimonitor.Sample, error) {
+func (h *Hardware) ReadSample() (*rpimonitor.Sample, error) {
 	now := time.Now()
 	s := &rpimonitor.Sample{
 		LocalTime: now,
@@ -41,7 +41,7 @@ func (d *Device) ReadSample() (*rpimonitor.Sample, error) {
 }
 
 //ReadStatus extract static info about this device.
-func (d *Device) ReadStatus() (*rpimonitor.Status, error) {
+func (h *Hardware) ReadStatus() (*rpimonitor.Status, error) {
 	now := time.Now()
 	s := &rpimonitor.Status{
 		LocalTime: now,

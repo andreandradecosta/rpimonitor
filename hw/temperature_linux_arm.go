@@ -1,7 +1,7 @@
 // +build linux
 // +build arm
 
-package device
+package hw
 
 import (
 	"os/exec"

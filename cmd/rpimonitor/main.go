@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/andreandradecosta/rpimonitor/daemon"
-	"github.com/andreandradecosta/rpimonitor/device"
 	"github.com/andreandradecosta/rpimonitor/echo"
+	"github.com/andreandradecosta/rpimonitor/hw"
 	"github.com/andreandradecosta/rpimonitor/mongo"
 	"github.com/andreandradecosta/rpimonitor/redis"
 	"github.com/namsral/flag"
@@ -34,7 +34,7 @@ func main() {
 		log.Println("Using ", *config)
 	}
 
-	device := &device.Device{}
+	hardware := &hw.Hardware{}
 	mongo, err := mongo.NewSampleService(*mongoURL)
 	if err != nil {
 		log.Println("Mongo:", err)
@@ -42,22 +42,15 @@ func main() {
 	redis := redis.NewUserService(*redisHost, *redisPasswd)
 
 	log.Println("Starting HTTP server...")
-	echo := &echo.Server{
-		StatusReader:  device,
-		SampleFetcher: mongo,
-		SampleReader:  device,
-		UserManager:   redis,
-		JWTSigningKey: *jwtSigningKey,
-		Debug:         *debug,
-	}
-	go echo.Start()
+	e := echo.New(*jwtSigningKey,
+		echo.WithDevice(hardware),
+		echo.WithSampleFetcher(mongo),
+		echo.WithUserManager(redis),
+		echo.WithDebug(*debug))
+	go e.Start()
 
 	log.Println("Starting monitor...")
-	daemon := &daemon.Daemon{
-		Interval: *sampleInterval,
-		Reader:   device,
-		Writer:   mongo,
-	}
+	daemon := daemon.New(*sampleInterval, hardware, mongo)
 	daemon.Start()
 
 }

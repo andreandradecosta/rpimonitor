@@ -12,12 +12,12 @@ type handleError struct {
 }
 
 func (s *Server) status(c echo.Context) error {
-	status, err := s.StatusReader.ReadStatus()
+	status, err := s.device.ReadStatus()
 	return handleDeviceRead(c, status, err)
 }
 
 func (s *Server) snapshot(c echo.Context) error {
-	sample, err := s.SampleReader.ReadSample()
+	sample, err := s.device.ReadSample()
 	return handleDeviceRead(c, sample, err)
 }
 
@@ -34,7 +34,7 @@ func (s *Server) history(c echo.Context) error {
 	if errS != nil || errE != nil {
 		return c.JSON(http.StatusOK, &handleError{"Invalid date range"})
 	}
-	res, err := s.SampleFetcher.Query(start, end)
+	res, err := s.sampleFetcher.Query(start, end)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
