@@ -112,10 +112,6 @@ func (l *Logger) Output() io.Writer {
 	return l.output
 }
 
-func (l *Logger) SetHeader(h string) {
-	l.template = l.newTemplate(h)
-}
-
 func (l *Logger) SetOutput(w io.Writer) {
 	l.output = w
 	if w, ok := w.(*os.File); !ok || !isatty.IsTerminal(w.Fd()) {
@@ -123,13 +119,20 @@ func (l *Logger) SetOutput(w io.Writer) {
 	}
 }
 
+func (l *Logger) Color() *color.Color {
+	return l.color
+}
+
+func (l *Logger) SetHeader(h string) {
+	l.template = l.newTemplate(h)
+}
+
 func (l *Logger) Print(i ...interface{}) {
 	fmt.Fprintln(l.output, i...)
 }
 
 func (l *Logger) Printf(format string, args ...interface{}) {
-	f := fmt.Sprintf("%s\n", format)
-	fmt.Fprintf(l.output, f, args...)
+	fmt.Fprintf(l.output, format, args...)
 }
 
 func (l *Logger) Printj(j JSON) {
