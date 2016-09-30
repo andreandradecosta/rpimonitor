@@ -5,24 +5,21 @@ go:
     - tip
 
 install:
-  - go get golang.org/x/tools/cmd/cover
-  - go get github.com/mattn/goveralls
-  - go get github.com/go-playground/overalls
+  - make install
 
 script:
-  - go test $(go list ./... | grep -v /vendor/)
-  - $GOPATH/bin/overalls -project=github.com/andreandradecosta/rpimonitor -covermode=count -ignore=.git,vendor,cmd -debug
-  - env GOOS=linux GOARCH=arm GOARM=7 go build -ldflags "-X main.commit=`git rev-parse --short HEAD` -X main.builtAt=`date +%FT%T%z`" -v -o rpimonitor cmd/rpimonitor/main.go
+  - make test
+  - make build_arm
 
 after_success:
-  - $GOPATH/bin/goveralls -coverprofile=overalls.coverprofile -service=travis-ci
+  - make cover
 
 deploy:
   provider: releases
   api_key:
     secure: a+iwDhQzrcOKzI4vC72FHG7Xm7uejLATYFD+nbFBm+dWREju48SWxtO41T6ARTEcCmNC4N+NP3LGHkqYsrUiplVKBP7C7piH+uwHulqVhHsY5+lZ3Fz3NYV/vJUHZBT5fc3FvbSl8y8A+nqlYFvcoG2ZoNeAZmNx52lNgD2aqzUEzMrYRxzg5K+ZaliOJClF1gtoISHZMiTn024X+yIsjQwZrmvIqNIChZFOmR+ZVSMluYd151E+ZwBf1x31BIVUkkAg1tbMvbPe3MxYVSVKdsPWCDTGy20J8lJhKHUyccCNe8LEpwhWQZPa/iLE6No7+S4atEjulme6ODaR7j0jSqUmdWvgzKv20r+u6dMF84ajNkKpgvSFm6Kjl7knYQ+1SB7Rm3p7EUd+NXhRzC871Ta9MvsJgjwSAr1E5u3reeMvTIxxXWF8/HRlaio0q61wZu6qhWUFnqsVdONzvgtAGRcekHiXpGxPhgxyTQLn+6xh4G/sabu1DeXLk+RGz8b8eiulm7JUsBYIhEv9ImgiQcIcOqwbZmZHlH50YmS9bXEli/eh8aOUp6C4+knWa+c8XINSouTgsw0IA+IF7aBOsU3JyDLm6Ovh/wZLwQyrNLSm4Lz5CdAjxGwvKPUUVE7X6Np5c3QNK8PzkPFI2/KqzOQ9tH727B+aWvcQ8Oi+aJI=
   file:
-      - rpimonitor
+      - bin/rpimonitor
   skip_cleanup: true
   on:
     repo: andreandradecosta/rpimonitor
