@@ -70,7 +70,10 @@ func (s *Server) Start() {
 		Format: "${time_rfc3339} - ${method}, ${uri}, [${status}]\n",
 	}))
 
-	e.Static("/", "static")
+	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+		Root:  "web",
+		HTML5: true,
+	}))
 	e.POST("/login", s.login)
 
 	r := e.Group("/api")
