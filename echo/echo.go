@@ -82,7 +82,7 @@ func (s *Server) Start() {
 		Root:  s.staticDir,
 		HTML5: true,
 	}))
-	e.POST("/login", s.login)
+	e.POST("/auth", s.login)
 
 	r := e.Group("/api")
 	r.Use(middleware.JWTWithConfig(middleware.JWTConfig{
