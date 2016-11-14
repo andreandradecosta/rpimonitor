@@ -26,6 +26,7 @@ func main() {
 	mongoURL := flag.String("MONGO_URL", "localhost", "mongodb://user:pass@host:port/database")
 	sampleInterval := flag.Duration("SAMPLE_INTERVAL", time.Second*10, "Sampling interval")
 	jwtSigningKey := flag.String("JWT_SIGNING_KEY", "", "JWT Signing Key")
+	staticDir := flag.String("STATIC_DIR", "web", "Web content dir")
 	debug := flag.Bool("DEBUG", false, "HTTP Server debug")
 
 	flag.Parse()
@@ -46,6 +47,7 @@ func main() {
 		echo.WithDevice(hardware),
 		echo.WithSampleFetcher(mongo),
 		echo.WithUserManager(redis),
+		echo.WithStaticDir(*staticDir),
 		echo.WithDebug(*debug))
 	go e.Start()
 

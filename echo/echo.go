@@ -14,6 +14,7 @@ type Server struct {
 	sampleFetcher rpimonitor.SampleFetcher
 	userManager   rpimonitor.UserManager
 	jwtSigningKey string
+	staticDir     string
 	debug         bool
 }
 
@@ -29,6 +30,13 @@ func New(key string, options ...Option) *Server {
 		opt(s)
 	}
 	return s
+}
+
+// WithStaticDir sets the static files path to the echo HTTP Server
+func WithStaticDir(d string) Option {
+	return func(s *Server) {
+		s.staticDir = d
+	}
 }
 
 // WithDebug sets the debug options of echo HTTP Server
@@ -71,7 +79,7 @@ func (s *Server) Start() {
 	}))
 
 	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-		Root:  "web",
+		Root:  s.staticDir,
 		HTML5: true,
 	}))
 	e.POST("/login", s.login)
