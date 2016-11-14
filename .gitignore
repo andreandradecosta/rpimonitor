@@ -27,3 +27,4 @@ gin-bin
 bin/
 .env
 .DS_Store
+users.db

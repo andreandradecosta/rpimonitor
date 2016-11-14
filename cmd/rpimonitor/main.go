@@ -8,7 +8,7 @@ import (
 	"github.com/andreandradecosta/rpimonitor/echo"
 	"github.com/andreandradecosta/rpimonitor/hw"
 	"github.com/andreandradecosta/rpimonitor/mongo"
-	"github.com/andreandradecosta/rpimonitor/redis"
+	"github.com/andreandradecosta/rpimonitor/usersdb"
 	"github.com/namsral/flag"
 )
 
@@ -21,12 +21,11 @@ func main() {
 	log.Printf("Build info: %s @ %s", commit, builtAt)
 
 	config := flag.String("config", "", "Config file path")
-	redisHost := flag.String("REDIS_HOST", "localhost:6379", "Redis host:port")
-	redisPasswd := flag.String("REDIS_PASSWD", "", "Redis password")
 	mongoURL := flag.String("MONGO_URL", "localhost", "mongodb://user:pass@host:port/database")
 	sampleInterval := flag.Duration("SAMPLE_INTERVAL", time.Second*10, "Sampling interval")
 	jwtSigningKey := flag.String("JWT_SIGNING_KEY", "", "JWT Signing Key")
 	staticDir := flag.String("STATIC_DIR", "web", "Web content dir")
+	usersFile := flag.String("USERS_DB", "users.db", "Users db file")
 	debug := flag.Bool("DEBUG", false, "HTTP Server debug")
 
 	flag.Parse()
@@ -40,13 +39,13 @@ func main() {
 	if err != nil {
 		log.Println("Mongo:", err)
 	}
-	redis := redis.NewUserService(*redisHost, *redisPasswd)
+	userService := usersdb.NewUserService(*usersFile)
 
 	log.Println("Starting HTTP server...")
 	e := echo.New(*jwtSigningKey,
 		echo.WithDevice(hardware),
 		echo.WithSampleFetcher(mongo),
-		echo.WithUserManager(redis),
+		echo.WithUserManager(userService),
 		echo.WithStaticDir(*staticDir),
 		echo.WithDebug(*debug))
 	go e.Start()
