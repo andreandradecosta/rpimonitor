@@ -31,15 +31,17 @@ func (u *UserService) Authenticate(login, password string) (*rpimonitor.User, er
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		row := strings.Split(scanner.Text(), ":")
-		l, n, p := row[0], row[1], row[2]
-		if l == login {
-			if bcrypt.CompareHashAndPassword([]byte(p), []byte(password)) == nil {
-				return &rpimonitor.User{
-					Login: l,
-					Name:  n,
-				}, nil
-			}
+		if len(row) == 3 {
+			l, n, p := row[0], row[1], row[2]
+			if l == login {
+				if bcrypt.CompareHashAndPassword([]byte(p), []byte(password)) == nil {
+					return &rpimonitor.User{
+						Login: l,
+						Name:  n,
+					}, nil
+				}
 
+			}
 		}
 	}
 	return nil, nil

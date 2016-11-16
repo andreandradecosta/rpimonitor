@@ -21,7 +21,10 @@ func TestAuthenticate(t *testing.T) {
 func setup(t *testing.T) *UserService {
 
 	users := `user1:User Name 1:$2a$06$9tV.C.JQ3e/uLldLKw6AG.Oq9u2pQOY4prDtEA2ub6FAHPUy5eG0.
-user2:User Name 2:$2a$06$rRPyoBBWY3QsMNaft5.mhOirujXtQylQYkH.8CFdD8ZoluQ8dUNCS`
+
+user2:User Name 2:$2a$06$rRPyoBBWY3QsMNaft5.mhOirujXtQylQYkH.8CFdD8ZoluQ8dUNCS
+
+`
 
 	tmpfile, err := ioutil.TempFile(".", "users_file_")
 	if err != nil {
