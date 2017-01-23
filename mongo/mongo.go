@@ -45,7 +45,7 @@ func (s *SampleService) Query(start, end time.Time) ([]rpimonitor.Sample, error)
 		"metrics.temperature":   1,
 		"metrics.daysUptime":    1,
 	}).Sort(
-		"-localTime",
+		"localTime",
 	).All(&result)
 	return result, errors.Wrapf(err, "query failed [%s]-[%s]", start, end)
 }
