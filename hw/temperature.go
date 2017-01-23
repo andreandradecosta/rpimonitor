@@ -3,6 +3,6 @@
 package hw
 
 // GetTemperature returns the host temperature or '-' if not available.
-func GetTemperature() (string, error) {
-	return "-", nil
+func GetTemperature() (float64, error) {
+	return 0, nil
 }

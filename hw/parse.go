@@ -1,16 +1,19 @@
 package hw
 
 import (
+	"regexp"
 	"strconv"
-	"strings"
 
 	"github.com/pkg/errors"
 )
 
-func parseTemperature(temp string) (string, error) {
-	t, err := strconv.ParseFloat(strings.TrimSpace(string(temp)), 64)
-	if err != nil {
-		return "", errors.Wrap(err, "could not parse temperature")
+//parseTemperature extract numeric temperature from a string like temp=49.8'C
+func parseTemperature(temp string) (float64, error) {
+	r, _ := regexp.Compile("([0-9]*\\.[0-9]+|[0-9]+)")
+	tStr := r.FindString(temp)
+	if len(tStr) == 0 {
+		return 0, errors.Errorf("Could not extract temperature from: %s", temp)
 	}
-	return strconv.FormatFloat(t/1000, 'f', 2, 64), nil
+	t, _ := strconv.ParseFloat(tStr, 64)
+	return t, nil
 }

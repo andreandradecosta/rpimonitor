@@ -9,8 +9,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-func GetTemperature() (string, error) {
-	cmd := exec.Command("cat", "/sys/class/thermal/thermal_zone0/temp")
+func GetTemperature() (float64, error) {
+	cmd := exec.Command("/opt/vc/bin/vcgencmd", "measure_temp")
 	output, err := cmd.Output()
 	if err != nil {
 		return "", errors.Wrap(err, "could not read temperature")
