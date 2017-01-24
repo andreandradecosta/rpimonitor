@@ -7,10 +7,10 @@ import (
 )
 
 func TestParse(t *testing.T) {
-	t.Run("temp=49.8'C=>49.8", parseSuccess("temp=49.8'C", 49.8))
-	t.Run("46.540=>46.54", parseSuccess("46.540", 46.54))
-	t.Run("1=>1", parseSuccess("1", 1))
-	t.Run("1.0=>1", parseSuccess("1.0", 1))
+	t.Run("50306=>50.306", parseSuccess("50306", 50.306))
+	t.Run("46540=>46.54", parseSuccess("46540", 46.54))
+	t.Run("46540CR=>46.54", parseSuccess("46540\n", 46.54))
+	t.Run("1=>1", parseSuccess("1", 0.001))
 	t.Run("xxx=>Error", parseError("xxx"))
 }
 

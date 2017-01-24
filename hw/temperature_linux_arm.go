@@ -10,7 +10,7 @@ import (
 )
 
 func GetTemperature() (float64, error) {
-	cmd := exec.Command("/opt/vc/bin/vcgencmd", "measure_temp")
+	cmd := exec.Command("cat", "/sys/class/thermal/thermal_zone0/temp")
 	output, err := cmd.Output()
 	if err != nil {
 		return 0, errors.Wrap(err, "could not read temperature")
