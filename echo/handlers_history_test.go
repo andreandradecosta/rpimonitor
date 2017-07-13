@@ -32,7 +32,7 @@ func (m *mockSampleFetcher) resultAsJSON() string {
 func TestHistory(t *testing.T) {
 	e := echo.New()
 	mock := &mockSampleFetcher{}
-	server := New("", WithSampleFetcher(mock))
+	server := New("", "", "", WithSampleFetcher(mock))
 	t.Run("No_Params", noParams(e, server))
 	t.Run("Invalid_Date", invalidDate(e, server))
 	t.Run("Return_Samples", returnSamples(e, mock, server))

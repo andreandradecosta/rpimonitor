@@ -24,7 +24,7 @@ func (m *mockUserManager) Authenticate(login, password string) (*rpimonitor.User
 func TestAuth(t *testing.T) {
 	e := echo.New()
 	mock := &mockUserManager{}
-	server := New("", WithUserManager(mock))
+	server := New("", "", "", WithUserManager(mock))
 	mock.user = &rpimonitor.User{
 		Login: "user_login",
 		Name:  "user_name",

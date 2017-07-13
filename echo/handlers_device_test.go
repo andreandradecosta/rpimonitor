@@ -30,7 +30,7 @@ func (m *mockDevice) ReadStatus() (*rpimonitor.Status, error) {
 func TestDevice(t *testing.T) {
 	e := echo.New()
 	mock := &mockDevice{}
-	server := New("", WithDevice(mock))
+	server := New("", "", "", WithDevice(mock))
 	mock.status = &rpimonitor.Status{}
 	mock.sample = &rpimonitor.Sample{}
 	t.Run("StatusOk", readOK(e, mock.status, server.status))
