@@ -14,6 +14,8 @@ type Server struct {
 	sampleFetcher rpimonitor.SampleFetcher
 	userManager   rpimonitor.UserManager
 	jwtSigningKey string
+	certFile      string
+	keyFile       string
 	staticDir     string
 	debug         bool
 }
@@ -22,9 +24,11 @@ type Server struct {
 type Option func(*Server)
 
 // New creates and configures a Echo HTTP Server
-func New(key string, options ...Option) *Server {
+func New(key string, certFile string, keyFile string, options ...Option) *Server {
 	s := &Server{
 		jwtSigningKey: key,
+		certFile:      certFile,
+		keyFile:       keyFile,
 	}
 	for _, opt := range options {
 		opt(s)
@@ -94,7 +98,7 @@ func (s *Server) Start() {
 	r.GET("/snapshot", s.snapshot)
 	e.Run(standard.WithTLS(
 		":8443",
-		"cert.pem",
-		"key.pem",
+		s.certFile,
+		s.keyFile,
 	))
 }
